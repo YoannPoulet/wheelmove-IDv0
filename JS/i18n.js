@@ -4,17 +4,22 @@
   let dict = {};
   let currentLang = defaults.lang;
 
+  // setText now only updates the text node, leaving images intact
   function setText(el, value) {
-    if (el.hasAttribute('data-i18n-html')) {
-      el.innerHTML = value;
+    // try to find a child <span class="i18n-text"> to replace
+    const textSpan = el.querySelector('.i18n-text');
+    if (textSpan) {
+      textSpan.textContent = value;
     } else {
-      el.textContent = value;
+      // fallback: if no span, only replace text nodes
+      Array.from(el.childNodes).forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) node.textContent = value;
+      });
     }
   }
 
   async function loadDict(lang) {
     try {
-      // fetch language file placed alongside other JS files (named i18n_fr.json / i18n_en.json)
       const res = await fetch(`JS/i18n_${lang}.json`);
       if (!res.ok) throw new Error('Missing i18n file');
       dict = await res.json();
@@ -57,9 +62,7 @@
     });
   }
 
-  // attach flags or lang selectors
   function attachLangSelectors() {
-    // Toggle language on click: switch to the other language and update flags
     document.querySelectorAll('.lang-flag').forEach(el => {
       el.addEventListener('click', (ev) => {
         ev.preventDefault();
@@ -69,9 +72,7 @@
     });
   }
 
-  // When the site language changes, show the opposite flag as the toggle icon
   function updateLangFlagImages() {
-    // show FR flag when site is EN, and EN flag when site is FR
     const flagFor = currentLang === 'en' ? 'fr' : 'en';
     const imgSrc = flagFor === 'fr' ? 'assets/flag-fr.png' : 'assets/flag-en.png';
     const imgAlt = flagFor === 'fr' ? 'FR' : 'EN';
@@ -81,7 +82,6 @@
         img.src = imgSrc;
         img.alt = imgAlt;
       }
-      // store the language we're switching TO on the element for clarity
       el.setAttribute('data-lang', flagFor);
     });
   }
@@ -94,6 +94,5 @@
     attachLangSelectors();
   });
 
-  // expose for debugging
   window._i18n = { load: loadDict };
 })();
