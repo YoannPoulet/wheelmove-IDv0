@@ -666,6 +666,7 @@ summary .summary-buttons button:not([disabled]) { cursor: pointer !important; }
   border-radius: 6px;
   font-size: 0.95rem;
   height: 40px; /* match logo height */
+  min-width: 68px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -704,4 +705,5 @@ summary .summary-buttons button:not([disabled]) { cursor: pointer !important; }
 }
 .help-menu .help-menu-item:hover {
   background: #f5f5f5;
+
 }
