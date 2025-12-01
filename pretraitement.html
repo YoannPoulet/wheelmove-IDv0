@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pré-traitement des données</title>
+  <title> WheelMove-ID : Pré-traitement</title>
   <link rel="stylesheet" href="CSS/style.css">
   <link rel="stylesheet" href="CSS/style-pretrtmt.css">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
@@ -43,11 +43,11 @@
     <div class="seuils-container">
       <details id="step1" open>
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Paramètres de pré-traitement</strong></span>
+          <span class="summary-text" data-i18n="pretrait_stp1"><strong>Paramètres de pré-traitement</strong></span>
           <div class="summary-buttons">
             <span id="tickStep1" class="tick hidden">✔</span>
-            <button id="validateStep1">Valider</button>
-            <button id="modifyStep1" class="modify-btn" disabled>Modifier</button>
+            <button id="validateStep1" data-i18n="valider">Valider</button>
+            <button id="modifyStep1" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
         <label>Fréquence d'acquisition (Hz) : <input type="number" id="freqIMU" step="10" min="10" value="100"></label>
@@ -90,11 +90,11 @@
     <div class="seuils-container">
       <details id="step2" class="locked">
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Paramètres du FRM</strong></span>
+          <span class="summary-text" data-i18n="pretrait_stp2"><strong>Paramètres du FRM</strong></span>
           <div class="summary-buttons">
             <span id="tickStep2" class="tick hidden">✔</span>
-            <button id="validateStep2">Valider</button>
-            <button id="modifyStep2" class="modify-btn" disabled>Modifier</button>
+            <button id="validateStep2" data-i18n="valider">Valider</button>
+            <button id="modifyStep2" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
           <label>Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
@@ -124,11 +124,11 @@
     <div class="seuils-container">
       <details id="step3" class="locked">
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Acquisition statique</strong></span>
+          <span class="summary-text" data-i18n="pretrait_stp3"><strong>Acquisition statique</strong></span>
           <div class="summary-buttons">
             <span id="tickStep3" class="tick hidden">✔</span>
-            <button id="validateStep3">Valider</button>
-            <button id="modifyStep3" class="modify-btn" disabled>Modifier</button>
+            <button id="validateStep3" data-i18n="valider">Valider</button>
+            <button id="modifyStep3" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
         <div class="load-container">
@@ -164,11 +164,11 @@
     <div class="seuils-container">
       <details id="step4" class="locked">
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Acquisition en ligne droite</strong></span>
+          <span class="summary-text" data-i18n="pretrait_stp4"><strong>Acquisition en ligne droite</strong></span>
           <div class="summary-buttons">
             <span id="tickStep4" class="tick hidden">✔</span>
-            <button id="validateStep4">Valider</button>
-            <button id="modifyStep4" class="modify-btn" disabled>Modifier</button>
+            <button id="validateStep4" data-i18n="valider">Valider</button>
+            <button id="modifyStep4" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
         <div class="load-container">
@@ -204,11 +204,11 @@
     <div class="seuils-container">
       <details id="step5" class="locked">
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Acquisitions à traiter</strong></span>
+          <span class="summary-text" data-i18n="pretrait_stp5"><strong>Acquisitions à traiter</strong></span>
           <div class="summary-buttons">
             <span id="tickStep5" class="tick hidden">✔</span>
-            <button id="validateStep5">Valider</button>
-            <button id="modifyStep5" class="modify-btn" disabled>Modifier</button>
+            <button id="validateStep5" data-i18n="valider">Valider</button>
+            <button id="modifyStep5" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
         <div class="load-container">
@@ -242,9 +242,9 @@
 
     <!-- Boutons de bas de page -->
     <div class="buttons-row-container">
-      <button id="newFRMBtn" disabled data-i18n=""> 
+      <button id="newFRMBtn" disabled> 
           <span class="btn-arrow">🢤</span> 
-          <span class="btn-text">Nouveau FRM</span> 
+          <span class="btn-text" data-i18n="nouv_FRM">Nouveau FRM</span> 
       </button>
     
       <button id="saveDataIMUBtn" class="highlight-btn" disabled autocomplete="off" data-i18n="run_pipeline">
@@ -279,7 +279,7 @@
     <div class="modal-content">
       <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
 
-      <h2>Contributeurs</h2>
+      <h2 data-i18n="auteurs_link">Contributeurs</h2>
 
       <div class="contributors-list compact">
 
@@ -362,7 +362,5 @@
 
 </body>
 </html>
-
-
 
 
