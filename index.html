@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Analyse des tâches locomotrices</title>
+  <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/style-ID.css">
+</head>
+<body>
+  <!-- En tête -->
+  <header class="app-header">
+    <div class="header-left">
+      <a href="index.html" aria-label="Accueil">
+        <img src="assets/logo_CERAH.svg" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+      </a>
+    </div>
+    <div class="header-center">
+      <h1 class="app-title" data-i18n="index_title">Analyse des tâches locomotrices</h1>
+    </div>
+    <div class="header-right">
+      <a class="lang-flag" title="English">
+        <img src="assets/flag-en.png" alt="EN" onerror="this.style.display='none'">
+      </a>
+      <button id="helpBtn" class="help-btn" type="button" aria-label="Aide" data-i18n="help_btn">Aide ?</button>
+    </div>
+  </header>
+
+  <!-- Message si pas de javascript -->
+  <noscript> 
+    <div class="msg-noscript">
+      ⚠️ <strong>JavaScript désactivé !</strong><br>
+      Cette page nécessite JavaScript pour fonctionner correctement.<br>
+      Les fichiers CSV ne pourront pas être chargés, les tâches locomotrices ne seront pas calculées, et les chronogrammes ne seront pas affichés.<br>
+      Veuillez activer JavaScript dans votre navigateur pour utiliser toutes les fonctionnalités.
+    </div> 
+  </noscript> 
+
+  <!-- Début du contenu -->
+  <div class="container">
+    <!-- Grid des 4 boutons principaux -->
+    <div class="actions-grid">
+      <div class="action-block">
+          <button id="loadDataBtn" class="highlight-btn" data-i18n="load_data_btn">Charger le ou les fichier(s)</button>
+          <div id="dropZone" class="drop-zone">ou déposez vos fichiers ici</div>
+      </div>
+      <div class="action-block">
+          <button id="btnValidateFilesParam" disabled autocomplete="off" data-i18n="">Valider les fichiers et paramètres</button>
+          <div class="action-zone" id="statusMsgValidate"></div>
+      </div>
+      <div class="action-block">
+          <button id="btnRunPipeline" disabled autocomplete="off" data-i18n="run_pipeline">Analyser</button>
+          <div class="action-zone" id="statusMsgRun"></div>
+      </div>
+      <div class="action-block">
+          <button id="saveDataBtn" disabled autocomplete="off" data-i18n="save_results">Sauvegarder</button>
+          <div class="action-zone" id="statusMsgSave"></div>
+      </div>
+    </div>
+
+    <!-- Tableau des acquisitions chargées -->
+    <div id="fileTableContainer" class="file-table-container hidden">
+      <table id="fileTable" class="dynamic-table">
+        <colgroup>
+        <col id="colFileName" class="colNom">
+        <col>
+        <col id="colAction" class="colAction">
+      </colgroup>
+        <thead>
+          <tr>
+            <th>Nom du fichier</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- lignes insérées dynamiquement -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tableau paramètres de seuils -->
+    <div class="seuils-container">
+      <details id="detailsParam" class="locked">
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Paramètres de traitement</strong></span>
+          <div class="summary-buttons">
+            <button id="btnLoadParameters" disabled>Charger</button>
+            <button id="btnExportParameters" disabled>Exporter</button>
+            <button id="resetSeuilsBtn" disabled>Défaut</button>
+          </div>
+        </summary>
+          <label>Fréquence d'acquisition (Hz) : <input type="number" id="freqAcq" step="10"></label>
+          <table class="fixed-table">
+            <tr>
+              <th>Signal</th>
+              <th>État 1</th>
+              <th>Seuil</th>
+              <th>État 2</th>
+              <th>Seuil</th>
+              <th>État 3</th>
+            </tr>
+
+            <tr>
+              <td>Vitesse linéaire<br>absolue</td>
+              <td>Statique</td>
+              <td><input type="number" id="seuilVitLinAbs" step="0.1"></td>
+              <td>En mouvement</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+
+            <tr>
+              <td>Vitesse angulaire<br>(°/s)</td>
+              <td>Ligne droite</td>
+              <td><input type="number" id="seuilVitAngAbs" step="1"></td>
+              <td>En rotation</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+
+            <tr>
+              <td>Rayon de courbure (m)</td>
+              <td>Virage sur place</td>
+              <td><input type="number" id="seuilRayonMin" step="0.1"></td>
+              <td>Virage serré</td>
+              <td><input type="number" id="seuilRayonMax" step="0.1"></td>
+              <td>Virage large</td>
+            </tr>
+          </table>
+
+          <label>Nouveau seuil vitLinAbs : <input type="number" id="newSeuilVitLinAbs" step="0.1"></label>
+          <label>Nouveau seuil vitAngAbs : <input type="number" id="newSeuilVitAngAbs" step="1"></label>
+
+      </details>
+    </div>
+
+    <!-- Checkbox pour choisir d'afficher vitesse linéaire ou angulaire -->
+    <div id="plotPanel" class="legend-panel" aria-hidden="true">
+      <div class="legend-controls" aria-label="Contrôles d'affichage">
+        <label>
+          <input type="checkbox" id="chkVitLin" checked autocomplete="off">
+          <span data-i18n="chk_vit_lin">Vitesse linéaire</span>
+        </label>
+        <label>
+          <input type="checkbox" id="chkVitAng" autocomplete="off">
+          <span data-i18n="chk_vit_ang">Vitesse angulaire</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Chronogrammes insérés dynamiquement -->
+    <div id="chronogrammesContainer"></div>
+
+    <!-- Persistent legend shown after running pipeline -->
+    <div id="legendPanel" class="legend-panel" aria-hidden="true">
+      <div class="legend-inner">
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(255,0,0,0.2)" data-i18n-src></span> <span data-i18n="legend_statique">Statique</span></span>
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(0,255,0,0.2)"></span> <span data-i18n="legend_prop_avant">Propulsion avant</span></span>
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(255,255,0,0.2)"></span> <span data-i18n="legend_prop_arriere">Propulsion arrière</span></span>
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(255,0,255,0.2)"></span> <span data-i18n="legend_pivot">Pivot</span></span>
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(0,255,255,0.2)"></span> <span data-i18n="legend_virage_serre">Virage serré</span></span>
+        <span class="legend-item"><span class="legend-bullet" style="background:rgba(0,0,255,0.2)"></span> <span data-i18n="legend_virage_large">Virage large</span></span>
+        <div class="summary-buttons">
+          <button id="btnExportLegend" data-i18n="">Exporter</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <footer class="site-footer" role="contentinfo" aria-label="Pied de page">
+    <nav aria-label="Liens pied de page">
+      <a href="#modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</a>
+      <span aria-hidden="true">|</span>
+      <a href="#modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</a>
+      <span aria-hidden="true">|</span>
+      <a href="https://www.mdpi.com/2409-9279/7/5/84" target="_blank" rel="noopener noreferrer" title="Publication associée" data-i18n="publication_link">Publication associée</a>
+      <span aria-hidden="true">|</span>
+      <a href="https://mobile.cerahtec.fr/fr/contact/cerah_site_invalides_recherches" target="_blank" rel="noopener noreferrer" title="Nous contacter" data-i18n="contact_link">Nous contacter</a>
+    /nav>
+  </footer>
+
+  <!-- Boite modale Contributeurs -->
+  <div id="modal-contributeurs" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+
+      <h2>Contributeurs</h2>
+
+      <div class="contributors-list compact">
+
+        <!-- Contributeur 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Christophe Sauret</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+        <!-- Contributeur 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Yoann Poulet</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+        <!-- Contributeur 3 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Mathieu Deves</div>
+            <div class="contributor-affiliation">
+              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
+            </div>
+            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale Mentions légales -->
+  <div id="modal-mentions" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+
+      <h2>Mentions légales</h2>
+
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Nulla facilisi. Vivamus id urna eget ligula dictum fringilla at nec ipsum. 
+        Aenean vel nibh ac odio aliquet cursus. Donec id pretium arcu. 
+        Suspendisse congue dictum dolor, vitae eleifend lorem suscipit a.
+      </p>
+
+      <p>
+        Curabitur convallis tempus lacus at varius. Morbi nec iaculis tellus. 
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+        Sed sodales est vel sem fermentum, ac aliquam velit porttitor. 
+        Integer vehicula libero nec urna sagittis, eget vulputate turpis tempor.
+      </p>
+
+      <p>
+        Vivamus non interdum leo. Donec laoreet ullamcorper magna, 
+        eu condimentum libero placerat vitae. Vestibulum consequat nec sapien id fermentum. 
+        In hac habitasse platea dictumst.
+      </p>
+    </div>
+  </div>
+
+  <script src="JS/i18n.js" defer></script>
+  <script src="JS/common.js" defer></script>
+  <script src="JS/locomotion.js" defer></script>
+
+</body>
+</html>

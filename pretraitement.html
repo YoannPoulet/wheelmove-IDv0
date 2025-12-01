@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pré-traitement des données</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/style-pretrtmt.css">
+</head>
+<body>
+  <!-- En tête -->
+  <header class="app-header">
+    <div class="header-left">
+      <a href="pretraitement.html" aria-label="Accueil">
+        <img src="assets/logo_CERAH.svg" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+      </a>
+    </div>
+    <div class="header-center">
+      <h1 class="app-title" data-i18n="pretrait_title">Pré-traitement des données</h1>
+    </div>
+    <div class="header-right">
+      <a class="lang-flag" title="English">
+        <img src="assets/flag-en.png" alt="EN" onerror="this.style.display='none'">
+      </a>
+      <button id="helpBtn" class="help-btn" type="button" aria-label="Aide" data-i18n="help_btn">Aide ?</button>
+    </div>
+  </header>
+
+  <!-- Message si pas de javascript -->
+  <noscript> 
+    <div class="msg-noscript">
+      ⚠️ <strong>JavaScript désactivé !</strong><br>
+      Cette page nécessite JavaScript pour fonctionner correctement.<br>
+      Les fichiers CSV ne pourront pas être chargés, les tâches locomotrices ne seront pas calculées, et les chronogrammes ne seront pas affichés.<br>
+      Veuillez activer JavaScript dans votre navigateur pour utiliser toutes les fonctionnalités.
+    </div> 
+  </noscript> 
+
+  <!-- Début contenu -->
+  <div class="container">
+    <!-- Step1: Paramètres globaux -->
+    <div class="seuils-container">
+      <details id="step1" open>
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Paramètres de pré-traitement</strong></span>
+          <div class="summary-buttons">
+            <span id="tickStep1" class="tick hidden">✔</span>
+            <button id="validateStep1">Valider</button>
+            <button id="modifyStep1" class="modify-btn" disabled>Modifier</button>
+          </div>
+        </summary>
+        <label>Fréquence d'acquisition (Hz) : <input type="number" id="freqIMU" step="10" min="10" value="100"></label>
+
+        <div class="initial-filter">
+          <label>Filtrage initial des données des gyroscopes et accéléromètres :</label>
+            <div class="filter-controls">
+                <!-- Option : aucun -->
+                <div class="filter-option">
+                    <input type="radio" name="initialFilter" id="filterNone" value="none" checked>
+                    <label for="filterNone">Aucun</label>
+                </div>
+                <!-- Option : MA -->
+                <div class="filter-option">
+                    <input type="radio" name="initialFilter" id="filterMA" value="ma">
+                    <label for="filterMA">Moyenne glissante</label>
+                    <!-- paramètres MA -->
+                    <div class="params" id="paramsMA">
+                        <label for="maWindow">Fenêtre de traitement :</label>
+                        <input type="number" id="maWindow" min="3" step="2" value="5">
+                    </div>
+                </div>
+                <!-- Option : SG -->
+                <div class="filter-option">
+                    <input type="radio" name="initialFilter" id="filterSG" value="SG">
+                    <label for="filterSG">Savitzky–Golay</label>
+                    <!-- paramètres SG -->
+                    <div class="params" id="paramsSG">
+                        <label for="sgWindow">Fenêtre de traitement :</label>
+                        <input type="number" id="sgWindow" min="3" step="2" value="7">
+                        <label for="sgPoly">Ordre du polynome :</label>
+                        <input type="number" id="sgPoly" min="1" max="9" step="1" value="2">
+                    </div>
+                </div>
+            </div>
+      </details>
+    </div>
+
+    <!-- Step2: Paramètres du FRM -->
+    <div class="seuils-container">
+      <details id="step2" class="locked">
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Paramètres du FRM</strong></span>
+          <div class="summary-buttons">
+            <span id="tickStep2" class="tick hidden">✔</span>
+            <button id="validateStep2">Valider</button>
+            <button id="modifyStep2" class="modify-btn" disabled>Modifier</button>
+          </div>
+        </summary>
+          <label>Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
+          <div>
+            <label for="FRMRayonRoue">
+              <span class="toggle" id="toggleRayonCirc">
+                <span id="onOpt" class="active">Rayon</span>
+                <span id="offOpt">Circonférence</span>
+              </span>
+              des roues arrières (cm) :
+              <input type="number" id="FRMRayonRoues" step="0.1" min="1">
+              <button class="modify-btn" type="button" id="toggleRayonsDiff">⚙️ Différencier gauche/droite</button>
+            </label>
+
+            <div id="FRMRayonsSepares" style="display: none">
+              <label>
+                Gauche : <input type="number" id="FRMRayonRoueG" step="0.1" min="1">
+                Droite : <input type="number" id="FRMRayonRoueD" step="0.1" min="1">
+              </label>
+            </div>
+          </div>
+          <label>Distance entre les points de contact sol/roues arrière (cm) : <input type="number" id="FRMdistCentresRoues" step="1" min="1"></label>
+      </details>
+    </div>
+
+    <!-- Step3: Chargement de la statique -->
+    <div class="seuils-container">
+      <details id="step3" class="locked">
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Acquisition statique</strong></span>
+          <div class="summary-buttons">
+            <span id="tickStep3" class="tick hidden">✔</span>
+            <button id="validateStep3">Valider</button>
+            <button id="modifyStep3" class="modify-btn" disabled>Modifier</button>
+          </div>
+        </summary>
+        <div class="load-container">
+          <button id="loadStatic">Charger l'acquisition statique</button>
+          <div id="dropZoneStatic" class="drop-zone">
+            ou déposez le fichier ici
+          </div>
+        </div>
+      </details>
+      <!-- Tableau spécifique Statique -->
+      <div id="fileTableContainerStatique" class="file-table-container hidden">
+        <table id="fileTableStatique"  class="dynamic-table">
+          <colgroup>
+            <col id="colFileNameStatique" class="colNom">
+            <col>
+            <col id="colActionStatique" class="colAction">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Nom du fichier</th>
+              <th>Statut</th>
+              <th style="white-space: nowrap;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- lignes insérées dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Step4: Chargement de la ligne droite -->
+    <div class="seuils-container">
+      <details id="step4" class="locked">
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Acquisition en ligne droite</strong></span>
+          <div class="summary-buttons">
+            <span id="tickStep4" class="tick hidden">✔</span>
+            <button id="validateStep4">Valider</button>
+            <button id="modifyStep4" class="modify-btn" disabled>Modifier</button>
+          </div>
+        </summary>
+        <div class="load-container">
+          <button id="loadLigneDroite">Charger l'acquisition en ligne droite</button>
+          <div id="dropZoneLigneDroite" class="drop-zone">
+            ou déposez le fichier ici
+          </div>
+        </div>
+      </details>
+      <!-- Tableau spécifique LigneDroite -->
+      <div id="fileTableContainerLigneDroite" class="file-table-container hidden">
+        <table id="fileTableLigneDroite"  class="dynamic-table">
+          <colgroup>
+            <col id="colFileNameLigneDroite" class="colNom">
+            <col>
+            <col id="colActionLigneDroite" class="colAction">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Nom du fichier</th>
+              <th>Statut</th>
+              <th style="white-space: nowrap;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- lignes insérées dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Step5: Chargement des acquisitions à traiter -->
+    <div class="seuils-container">
+      <details id="step5" class="locked">
+        <summary class="custom-summary">
+          <span class="summary-text"><strong>Acquisitions à traiter</strong></span>
+          <div class="summary-buttons">
+            <span id="tickStep5" class="tick hidden">✔</span>
+            <button id="validateStep5">Valider</button>
+            <button id="modifyStep5" class="modify-btn" disabled>Modifier</button>
+          </div>
+        </summary>
+        <div class="load-container">
+          <button id="loadAcquis">Charger la (les) acquisition(s) à traiter</button>
+          <div id="dropZoneAcquis" class="drop-zone">
+          ou déposez le(s) fichier(s) ici
+          </div>
+        </div>
+      </details>
+      <!-- Tableau spécifique Acquis -->
+      <div id="fileTableContainerAcquis" class="file-table-container hidden">
+        <table id="fileTableAcquis"  class="dynamic-table">
+          <colgroup>
+            <col id="colFileNameAcquis" class="colNom">
+            <col>
+            <col id="colActionAcquis" class="colAction">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Nom du fichier</th>
+              <th>Statut</th>
+              <th style="white-space: nowrap;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- lignes insérées dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Boutons de bas de page -->
+    <div class="buttons-row-container">
+      <button id="newFRMBtn" disabled data-i18n=""> 
+          <span class="btn-arrow">🢤</span> 
+          <span class="btn-text">Nouveau FRM</span> 
+      </button>
+    
+      <button id="saveDataIMUBtn" class="highlight-btn" disabled autocomplete="off" data-i18n="run_pipeline">
+          Traiter les données
+      </button>
+    
+      <button id="gotoIdentification" onclick="location.href='index.html'">
+        <span class="btn-text" data-i18n="identification_button">Aller à l'identification des tâches </span>
+        <span class="btn-arrow">➪</span> 
+      </button>
+    </div>
+
+    <div id="statusMsgSaveIMU"></div>
+    
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo" aria-label="Pied de page">
+    <nav aria-label="Liens pied de page">
+      <a href="#modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</a>
+      <span aria-hidden="true">|</span>
+      <a href="#modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</a>
+      <span aria-hidden="true">|</span>
+      <a href="https://www.mdpi.com/2409-9279/7/5/84" target="_blank" rel="noopener noreferrer" title="Publication associée" data-i18n="publication_link">Publication associée</a>
+      <span aria-hidden="true">|</span>
+      <a href="https://mobile.cerahtec.fr/fr/contact/cerah_site_invalides_recherches" target="_blank" rel="noopener noreferrer" title="Nous contacter" data-i18n="contact_link">Nous contacter</a>
+    </nav>
+  </footer>
+
+  <!-- Boite modale Contributeurs -->
+  <div id="modal-contributeurs" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+
+      <h2>Contributeurs</h2>
+
+      <div class="contributors-list compact">
+
+        <!-- Contributeur 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Christophe Sauret</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+        <!-- Contributeur 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Yoann Poulet</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+        <!-- Contributeur 3 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Mathieu Deves</div>
+            <div class="contributor-affiliation">
+              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
+            </div>
+            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale Mentions légales -->
+  <div id="modal-mentions" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+
+      <h2>Mentions légales</h2>
+
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Nulla facilisi. Vivamus id urna eget ligula dictum fringilla at nec ipsum. 
+        Aenean vel nibh ac odio aliquet cursus. Donec id pretium arcu. 
+        Suspendisse congue dictum dolor, vitae eleifend lorem suscipit a.
+      </p>
+
+      <p>
+        Curabitur convallis tempus lacus at varius. Morbi nec iaculis tellus. 
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+        Sed sodales est vel sem fermentum, ac aliquam velit porttitor. 
+        Integer vehicula libero nec urna sagittis, eget vulputate turpis tempor.
+      </p>
+
+      <p>
+        Vivamus non interdum leo. Donec laoreet ullamcorper magna, 
+        eu condimentum libero placerat vitae. Vestibulum consequat nec sapien id fermentum. 
+        In hac habitasse platea dictumst.
+      </p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js" defer></script>
+  <script src="JS/i18n.js" defer></script>
+  <script src="JS/common.js" defer></script>
+  <script src="JS/pretraitement.js" defer></script>
+
+</body>
+</html>
+
+
