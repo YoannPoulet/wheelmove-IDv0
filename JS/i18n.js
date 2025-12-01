@@ -6,17 +6,20 @@
 
   // setText now only updates the text node, leaving images intact
   function setText(el, value) {
-    // try to find a child <span class="i18n-text"> to replace
+  if (el.hasAttribute('data-i18n-html')) {
+    el.innerHTML = value; // remplace tout le HTML
+  } else {
+    // seulement le texte à l’intérieur (ex: <span class="i18n-text">)
     const textSpan = el.querySelector('.i18n-text');
     if (textSpan) {
       textSpan.textContent = value;
     } else {
-      // fallback: if no span, only replace text nodes
       Array.from(el.childNodes).forEach(node => {
         if (node.nodeType === Node.TEXT_NODE) node.textContent = value;
       });
     }
   }
+}
 
   async function loadDict(lang) {
     try {
