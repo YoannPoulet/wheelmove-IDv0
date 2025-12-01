@@ -43,6 +43,13 @@
       if (dict[key] !== undefined) setText(el, dict[key]);
     });
 
+    // textes HTML formatés
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (!key) return;
+      if (dict[key] !== undefined) setText(el, dict[key]);
+    });
+
     // hrefs
     document.querySelectorAll('[data-i18n-href]').forEach(el => {
       const key = el.getAttribute('data-i18n-href');
@@ -99,3 +106,4 @@
 
   window._i18n = { load: loadDict };
 })();
+
