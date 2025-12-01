@@ -23,7 +23,7 @@
   "legend_virage_large": "Virage large",
   "chk_vit_lin": "Vitesse linéaire",
   "chk_vit_ang": "Vitesse angulaire",
-  "index_title": "Analyse des tâches locomotrices",
+  "locomotion_title": "Analyse des tâches locomotrices",
   "intro_title": "Introduction à l’analyse des chronogrammes",
   "pretrait_title": "Pré-traitement des données",
   "help_manual": "Manuel d'utilisation",
@@ -32,3 +32,4 @@
   "help_explication": "Explication des calculs",
   "help_explication_href": "assets/ExplicationCalculs_EN.pdf"
 }
+
