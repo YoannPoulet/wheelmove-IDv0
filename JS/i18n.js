@@ -46,6 +46,8 @@
     // textes HTML formatés
     document.querySelectorAll('[data-i18n-html]').forEach(el => {
       const key = el.getAttribute('data-i18n-html');
+      console.log(key);
+      console.log(dict[key]);
       if (!key) return;
       if (dict[key] !== undefined) setText(el, dict[key]);
     });
@@ -106,4 +108,5 @@
 
   window._i18n = { load: loadDict };
 })();
+
 
