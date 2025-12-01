@@ -32,7 +32,7 @@
   "chk_vit_lin": "Vitesse linéaire",
   "chk_vit_ang": "Vitesse angulaire",
   "index_title": "Analyse des tâches locomotrices",
-  "intro_title": "Introduction à l’analyse des chronogrammes",
+  "intro_title": "Introduction",
   "pretrait_title": "Pré-traitement des données",
   "help_manual": "Manuel d'utilisation",
   "help_manual_href": "assets/ManuelUtilisation_FR.pdf",
@@ -41,3 +41,4 @@
   "intro_text": "<p>Bienvenue sur cette application d’analyse des actions locomotrices en Fauteuil Roulant Manuel (FRM). Cette application vous permettra de :</p><ul><li>Déterminer les vitesses linéaire et angulaire du FRM à partir des données de centrales inertielles.</li><li>Identifier automatiquement les tâches locomotrices en personnalisant les seuils utilisés.</li><li>Visualiser les résultats sous forme de chronogrammes épurés.</li><li>Exporter les résultats au format CSV pour un traitement ultérieur.</li></ul><p>Avant de commencer, il est important de :</p><ul><li>Lire attentivement les instructions de chargement des fichiers (Bouton Aide en haut à droite).</li><li>S'assurer que les données enregistrées soient complètent, les données incomplètent n'étant pas gérées par cette application.</li><li>Comprendre le fonctionnement du traitement et la signification des chronogrammes en lisant l'aide ou la publication associée à ces travaux (en bas de page).</li></ul><p>Une fois que vous aurez pris connaissance de toutes ces informations, utilisez les boutons ci-dessous pour naviguer dans l'application.</p>",
   "mentions_legal": "<h2>Mentions légales</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vivamus id urna eget ligula dictum fringilla at nec ipsum. Aenean vel nibh ac odio aliquet cursus. Donec id pretium arcu. Suspendisse congue dictum dolor, vitae eleifend lorem suscipit a.</p><p>Curabitur convallis tempus lacus at varius. Morbi nec iaculis tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sodales est vel sem fermentum, ac aliquam velit porttitor. Integer vehicula libero nec urna sagittis, eget vulputate turpis tempor.</p><p>Vivamus non interdum leo. Donec laoreet ullamcorper magna, eu condimentum libero placerat vitae. Vestibulum consequat nec sapien id fermentum. In hac habitasse platea dictumst.</p>"
 }
+
