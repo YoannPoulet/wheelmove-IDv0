@@ -23,7 +23,7 @@
   "legend_virage_large": "Wide turn",
   "chk_vit_lin": "Linear speed",
   "chk_vit_ang": "Angular speed",
-  "index_title": "Locomotive tasks analysis",
+  "locomotion_title": "Locomotive tasks analysis",
   "intro_title": "Introduction to chronograms analysis",
   "pretrait_title": "Data preprocessing",
   "help_manual": "User manual",
@@ -31,3 +31,4 @@
   "help_explication": "Calculation explanation",
   "help_explication_href": "assets/ExplicationCalculs_EN.pdf"
 }
+
