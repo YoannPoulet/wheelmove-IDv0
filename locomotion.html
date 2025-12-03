@@ -42,11 +42,11 @@
     <!-- Grid des 4 boutons principaux -->
     <div class="actions-grid">
       <div class="action-block">
-          <button id="loadDataBtn" class="highlight-btn" data-i18n="load_data_btn">Charger le ou les fichier(s)</button>
+          <button id="loadDataBtn" class="highlight-btn" data-i18n="load_data_btn">Charger le(s) fichier(s)</button>
           <div id="dropZone" class="drop-zone">ou déposez vos fichiers ici</div>
       </div>
       <div class="action-block">
-          <button id="btnValidateFilesParam" disabled autocomplete="off" data-i18n="">Valider les fichiers et paramètres</button>
+          <button id="btnValidateFilesParam" disabled autocomplete="off" data-i18n="validate_files_params">Valider les fichier(s) et paramètres</button>
           <div class="action-zone" id="statusMsgValidate"></div>
       </div>
       <div class="action-block">
@@ -69,9 +69,9 @@
       </colgroup>
         <thead>
           <tr>
-            <th>Nom du fichier</th>
-            <th>Statut</th>
-            <th>Action</th>
+            <th data-i18n="table_name">Nom du fichier</th>
+            <th data-i18n="table_status">Statut</th>
+            <th style="white-space: nowrap;" data-i18n="table_action">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -84,15 +84,15 @@
     <div class="seuils-container">
       <details id="detailsParam" class="locked">
         <summary class="custom-summary">
-          <span class="summary-text"><strong>Paramètres de traitement</strong></span>
+          <span class="summary-text" data-i18n="seuils_titre"><strong>Paramètres de traitement</strong></span>
           <div class="summary-buttons">
             <button id="btnLoadParameters" disabled>Charger</button>
             <button id="btnExportParameters" disabled>Exporter</button>
             <button id="resetSeuilsBtn" disabled>Défaut</button>
           </div>
         </summary>
-          <label>Fréquence d'acquisition (Hz) : <input type="number" id="freqAcq" step="10"></label>
-          <table class="fixed-table">
+          <label data-i18n="frequence">Fréquence d'acquisition (Hz) : <input type="number" id="freqAcq" step="10"></label>
+          <table class="fixed-table" data-i18n-html="seuils_table">
             <tr>
               <th>Signal</th>
               <th>État 1</th>
@@ -130,8 +130,8 @@
             </tr>
           </table>
 
-          <label>Nouveau seuil vitLinAbs : <input type="number" id="newSeuilVitLinAbs" step="0.1"></label>
-          <label>Nouveau seuil vitAngAbs : <input type="number" id="newSeuilVitAngAbs" step="1"></label>
+          <label data-i18n="seuils_newseuilvitLin">Nouveau seuil vitLinAbs : <input type="number" id="newSeuilVitLinAbs" step="0.1"></label>
+          <label data-i18n="seuils_newseuilvitAng">Nouveau seuil vitAngAbs : <input type="number" id="newSeuilVitAngAbs" step="1"></label>
 
       </details>
     </div>
@@ -163,7 +163,7 @@
         <span class="legend-item"><span class="legend-bullet" style="background:rgba(0,255,255,0.2)"></span> <span data-i18n="legend_virage_serre">Virage serré</span></span>
         <span class="legend-item"><span class="legend-bullet" style="background:rgba(0,0,255,0.2)"></span> <span data-i18n="legend_virage_large">Virage large</span></span>
         <div class="summary-buttons">
-          <button id="btnExportLegend" data-i18n="">Exporter</button>
+          <button id="btnExportLegend" data-i18n="export">Exporter</button>
         </div>
       </div>
     </div>
@@ -236,7 +236,7 @@
 
   <!-- Boite modale Mentions légales -->
   <div id="modal-mentions" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" data-i18n-html="mentions_legal">
       <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
 
       <h2>Mentions légales</h2>
