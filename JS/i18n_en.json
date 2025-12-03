@@ -12,6 +12,8 @@
   "valider": "Confirm",
   "modifier": "Edit",
   "export": "Export",
+  "load": "Load",
+  "default": "Default",
   "mentions_link": "Legal notice",
   "auteurs_link": "Contributors",
   "publication_link": "Related publication",
@@ -69,13 +71,14 @@
   "table_name": "File name",
   "table_status": "Status",
   "table_action": "Action",
+  "table_done": "Done ✅",
   "straight_load": "Load straight-line acquisition",
   "acquis_load": "Load the acquisition(s) to process",
   "seuils_titre": "Processing parameters",
   "seuils_table": "<tr><th>Signal</th><th>State 1</th><th>Threshold</th><th>State 2</th><th>Threshold</th><th>State 3</th></tr><tr><td>Absolute<br>linear speed</td><td>Static</td><td><input type=\"number\" id=\"seuilVitLinAbs\" step=\"0.1\"></td><td>In motion</td><td>—</td><td>—</td></tr><tr><td>Angular speed<br>(°/s)</td><td>Straight line</td><td><input type=\"number\" id=\"seuilVitAngAbs\" step=\"1\"></td><td>Turning</td><td>—</td><td>—</td></tr><tr><td>Radius of curvature (m)</td><td>In-place turn</td><td><input type=\"number\" id=\"seuilRayonMin\" step=\"0.1\"></td><td>Tight turn</td><td><input type=\"number\" id=\"seuilRayonMax\" step=\"0.1\"></td><td>Wide turn</td></tr></table>",
   "seuils_newseuilvitLin": "New vitLinAbs threshold: ",
   "seuils_newseuilvitAng": "New vitAngAbs threshold: ",
-  "showStatus_savepreprocess": "✅ Results saved in the /Downloadsfolder!",
+  "showStatus_savepreprocess": "✅ Results saved in the /Downloads folder!",
   "showStatus_validatefilesparam": "✅ Files and parameters validated",
   "showStatus_resultsSaved": "✅ Results saved",
   "showStatus_pending": "In progress…",
@@ -83,6 +86,8 @@
   "showStatus_error": "❌ Error while saving results",
   "row_wrongformat": "Unsupported format (only CSV files are accepted)",
   "row_doublon": "File already loaded",
-  "row_loaded": "Loaded"
+  "row_loaded": "Loaded",
+  "error_missingValue": "Missing data (NaN) in ",
+  "error_missingData": "No data found for preprocessing save",
+  "error_missingCol": "Missing columns in "
 }
-
