@@ -48,7 +48,7 @@ async function handleFiles(files, category = null) {
     // Ajouter l'acquisition
     appState.acquisitions.push(acq);
       const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_loaded') : "Chargé"
-      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
+      addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt);
     } catch (err) {
       addFileRow(visibleName, err && err.message ? err.message : String(err), true, idForRow, fileNameWithoutExt);
     }
@@ -758,3 +758,4 @@ function pchipInterpolate(x, y, xi) {
   }
 
 })();
+
