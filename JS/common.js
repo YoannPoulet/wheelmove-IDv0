@@ -25,13 +25,15 @@ async function handleFiles(files, category = null) {
 
     // Vérifier extension
     if (!visibleName.toLowerCase().endsWith('.csv')) {
-      addFileRow(visibleName, 'Format non supporté (seuls les CSV sont acceptés)', true, idForRow, fileNameWithoutExt);
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_wrongformat') : "Format non supporté (seuls les CSV sont acceptés)"
+      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
       continue;
     }
 
     // Vérifier doublon
     if (appState.acquisitions.some(acq => acq.fileName === fileNameWithoutExt && acq.category === category)) {
-      addFileRow(visibleName, 'Fichier déjà chargé', true, idForRow, fileNameWithoutExt);
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_doublon') : "Fichier déjà chargé"
+      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
       continue;
     }
 
@@ -45,9 +47,8 @@ async function handleFiles(files, category = null) {
 
     // Ajouter l'acquisition
     appState.acquisitions.push(acq);
-
-      addFileRow(visibleName, 'Chargé', false, idForRow, fileNameWithoutExt);
-
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_loaded') : "Chargé"
+      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
     } catch (err) {
       addFileRow(visibleName, err && err.message ? err.message : String(err), true, idForRow, fileNameWithoutExt);
     }
@@ -666,14 +667,11 @@ function pchipInterpolate(x, y, xi) {
     for (const it of items) {
       const a = document.createElement('a');
       a.className = 'help-menu-item';
-      // text will be filled by i18n loader (data-i18n)
       a.setAttribute('data-i18n', it.key);
-      // href will be filled by i18n loader (data-i18n-href)
       a.setAttribute('data-i18n-href', it.hrefKey);
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
       a.setAttribute('role','menuitem');
-      // put a sensible default to avoid empty link before i18n loads
       a.textContent = it.key;
       menu.appendChild(a);
     }
