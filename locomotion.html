@@ -43,7 +43,7 @@
     <div class="actions-grid">
       <div class="action-block">
           <button id="loadDataBtn" class="highlight-btn" data-i18n="load_data_btn">Charger le(s) fichier(s)</button>
-          <div id="dropZone" class="drop-zone">ou déposez vos fichiers ici</div>
+          <div id="dropZone" class="drop-zone" data-i18n="multiple_drop">ou déposez le(s) fichier(s) ici</div>
       </div>
       <div class="action-block">
           <button id="btnValidateFilesParam" disabled autocomplete="off" data-i18n="validate_files_params">Valider les fichier(s) et paramètres</button>
@@ -86,11 +86,12 @@
         <summary class="custom-summary">
           <span class="summary-text" data-i18n="seuils_titre"><strong>Paramètres de traitement</strong></span>
           <div class="summary-buttons">
-            <button id="btnLoadParameters" disabled>Charger</button>
-            <button id="btnExportParameters" disabled>Exporter</button>
-            <button id="resetSeuilsBtn" disabled>Défaut</button>
+            <button id="btnLoadParameters" data-i18n="load" disabled>Charger</button>
+            <button id="btnExportParameters" data-i18n="export" disabled>Exporter</button>
+            <button id="resetSeuilsBtn" data-i18n="default" disabled>Défaut</button>
           </div>
         </summary>
+        <!-- AJOUTER LE CHOIX DE FENETRE DE TRAITEMENT (SEGMENTATION) -->
           <label data-i18n="frequence">Fréquence d'acquisition (Hz) : <input type="number" id="freqAcq" step="10"></label>
           <table class="fixed-table" data-i18n-html="seuils_table">
             <tr>
