@@ -25,15 +25,17 @@ async function handleFiles(files, category = null) {
 
     // Vérifier extension
     if (!visibleName.toLowerCase().endsWith('.csv')) {
-      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_wrongformat') : "Format non supporté (seuls les CSV sont acceptés)"
-      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
+      const key = 'row_wrongformat';
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Format non supporté (seuls les CSV sont acceptés)";
+      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt, key);
       continue;
     }
 
     // Vérifier doublon
     if (appState.acquisitions.some(acq => acq.fileName === fileNameWithoutExt && acq.category === category)) {
-      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_doublon') : "Fichier déjà chargé"
-      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt);
+      const key = 'row_doublon';
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Fichier déjà chargé";
+      addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt, key);
       continue;
     }
 
@@ -47,8 +49,9 @@ async function handleFiles(files, category = null) {
 
     // Ajouter l'acquisition
     appState.acquisitions.push(acq);
-      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('row_loaded') : "Chargé"
-      addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt);
+      const key = 'row_loaded';
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
+      addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
     } catch (err) {
       addFileRow(visibleName, err && err.message ? err.message : String(err), true, idForRow, fileNameWithoutExt);
     }
@@ -84,7 +87,8 @@ function showStatus(message, type = 'success', elementId = 'statusMsgLoad', dura
 // isError: bool
 // idTable: chaîne optionnelle fournie par l'appelant (ex: "Statique")
 // acqName: nom interne de l'acquisition sans extension (utilisé pour retrouver l'objet dans state.acquisitions)
-function addFileRow(filename, status, isError = false, idTable = null, acqName = null) {
+// filename, status (string), isError, idTable, acqName, statusKey (optional i18n key)
+function addFileRow(filename, status, isError = false, idTable = null, acqName = null, statusKey = null) {
   // Choisir le tbody selon le type demandé
   let tbody = null;
   if (idTable === 'Statique') tbody = document.querySelector('#fileTableStatique tbody');
@@ -108,7 +112,25 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
   nameCell.textContent = idTable ? `${filename} (${idTable})` : filename;
 
   const statusCell = document.createElement('td');
-  statusCell.textContent = status;
+  // If a translation key was provided, prefer using i18n.t and register a listener to update on language change
+  if (statusKey && window.i18n && typeof window.i18n.t === 'function') {
+    try {
+      statusCell.textContent = window.i18n.t(statusKey);
+    } catch (e) {
+      statusCell.textContent = status;
+    }
+    // subscribe to language changes
+    if (window.i18n && typeof window.i18n.onChange === 'function') {
+      const updater = () => {
+        try { statusCell.textContent = window.i18n.t(statusKey); } catch (e) { /* ignore */ }
+      };
+      window.i18n.onChange(updater);
+      // store reference on cell in case future removal is desired
+      statusCell.dataset.i18nListener = '1';
+    }
+  } else {
+    statusCell.textContent = status;
+  }
   // marquer la ligne entière (utile pour colorer toute la ligne)
   row.classList.add(isError ? 'error' : 'success');
 
