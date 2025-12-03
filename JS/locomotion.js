@@ -64,7 +64,7 @@ class Acquisition {
     const headers = lines[0].split(';').map(h => h.trim());
     const idxVitLin = headers.findIndex(h => h.toLowerCase().includes('lin'));
     const idxVitAng = headers.findIndex(h => h.toLowerCase().includes('ang'));
-    if (idxVitLin === -1 || idxVitAng === -1) throw new Error("Colonnes manquantes dans " + this.fileName);
+    if (idxVitLin === -1 || idxVitAng === -1) throw new Error((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('error_missingCol') : "Colonnes manquantes dans " + this.fileName);
 
     this.nbFrames = lines.length - 1;
 
@@ -80,7 +80,7 @@ class Acquisition {
       const vAng = parseFloat(row[idxVitAng].replace(',', '.'));
 
       if (isNaN(vLin) || isNaN(vAng)) {
-      throw new Error("Données manquantes (NaN) dans " + this.fileName);
+      throw new Error((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('error_missingValue') : "Données manquantes (NaN) dans " + this.fileName);
       }
 
       this.vitLin.push(vLin);
