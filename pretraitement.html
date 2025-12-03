@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> WheelMove-ID : Pré-traitement</title>
+  <title> WheelMove-ID : Preprocessing</title>
   <link rel="stylesheet" href="CSS/style.css">
   <link rel="stylesheet" href="CSS/style-pretrtmt.css">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
@@ -50,35 +50,35 @@
             <button id="modifyStep1" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
-        <label>Fréquence d'acquisition (Hz) : <input type="number" id="freqIMU" step="10" min="10" value="100"></label>
+        <label data-i18n="frequence">Fréquence d'acquisition (Hz) : <input type="number" id="freqIMU" step="10" min="10" value="100"></label>
 
         <div class="initial-filter">
-          <label>Filtrage initial des données des gyroscopes et accéléromètres :</label>
+          <label data-i18n="initial_filter_choice">Filtrage initial des données des gyroscopes et accéléromètres :</label>
             <div class="filter-controls">
                 <!-- Option : aucun -->
                 <div class="filter-option">
                     <input type="radio" name="initialFilter" id="filterNone" value="none" checked>
-                    <label for="filterNone">Aucun</label>
+                    <label for="filterNone" data-i18n="initial_filter_none">Aucun</label>
                 </div>
                 <!-- Option : MA -->
                 <div class="filter-option">
                     <input type="radio" name="initialFilter" id="filterMA" value="ma">
-                    <label for="filterMA">Moyenne glissante</label>
+                    <label for="filterMA" data-i18n="initial_filter_MA">Moyenne glissante</label>
                     <!-- paramètres MA -->
                     <div class="params" id="paramsMA">
-                        <label for="maWindow">Fenêtre de traitement :</label>
+                        <label for="maWindow" data-i18n="initial_filter_win">Fenêtre de traitement :</label>
                         <input type="number" id="maWindow" min="3" step="2" value="5">
                     </div>
                 </div>
                 <!-- Option : SG -->
                 <div class="filter-option">
                     <input type="radio" name="initialFilter" id="filterSG" value="SG">
-                    <label for="filterSG">Savitzky–Golay</label>
+                    <label for="filterSG" data-i18n="initial_filter_SG">Savitzky–Golay</label>
                     <!-- paramètres SG -->
                     <div class="params" id="paramsSG">
-                        <label for="sgWindow">Fenêtre de traitement :</label>
+                        <label for="sgWindow" data-i18n="initial_filter_win">Fenêtre de traitement :</label>
                         <input type="number" id="sgWindow" min="3" step="2" value="7">
-                        <label for="sgPoly">Ordre du polynome :</label>
+                        <label for="sgPoly" data-i18n="initial_filter_ord">Ordre du polynome :</label>
                         <input type="number" id="sgPoly" min="1" max="9" step="1" value="2">
                     </div>
                 </div>
@@ -97,26 +97,26 @@
             <button id="modifyStep2" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
-          <label>Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
+          <label data-i18n="FRM_camber">Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
           <div>
             <label for="FRMRayonRoue">
               <span class="toggle" id="toggleRayonCirc">
-                <span id="onOpt" class="active">Rayon</span>
-                <span id="offOpt">Circonférence</span>
+                <span id="onOpt" class="active" data-i18n="FRM_rad">Rayon</span>
+                <span id="offOpt" data-i18n="FRM_circ">Circonférence</span>
               </span>
-              des roues arrières (cm) :
+              <span data-i18n="FRM_circ">des roues arrières (cm) :</span>
               <input type="number" id="FRMRayonRoues" step="0.1" min="1">
-              <button class="modify-btn" type="button" id="toggleRayonsDiff">⚙️ Différencier gauche/droite</button>
+              <button class="modify-btn" type="button" id="toggleRayonsDiff" data-i18n="FRM_gauchedroite">⚙️ Différencier gauche/droite</button>
             </label>
 
             <div id="FRMRayonsSepares" style="display: none">
               <label>
-                Gauche : <input type="number" id="FRMRayonRoueG" step="0.1" min="1">
-                Droite : <input type="number" id="FRMRayonRoueD" step="0.1" min="1">
+                <span data-i18n="FRM_G">Gauche :</span> <input type="number" id="FRMRayonRoueG" step="0.1" min="1">
+                <span data-i18n="FRM_D">Droite :</span> <input type="number" id="FRMRayonRoueD" step="0.1" min="1">
               </label>
             </div>
           </div>
-          <label>Distance entre les points de contact sol/roues arrière (cm) : <input type="number" id="FRMdistCentresRoues" step="1" min="1"></label>
+          <label data-i18n="FRM_distcenterW">Distance entre les points de contact sol/roues arrière (cm) : <input type="number" id="FRMdistCentresRoues" step="1" min="1"></label>
       </details>
     </div>
 
@@ -132,9 +132,9 @@
           </div>
         </summary>
         <div class="load-container">
-          <button id="loadStatic">Charger l'acquisition statique</button>
+          <button id="loadStatic" data-i18n="static_load">Charger l'acquisition statique</button>
           <div id="dropZoneStatic" class="drop-zone">
-            ou déposez le fichier ici
+            <span data-i18n="single_drop">ou déposez le fichier ici</span>
           </div>
         </div>
       </details>
@@ -148,9 +148,9 @@
           </colgroup>
           <thead>
             <tr>
-              <th>Nom du fichier</th>
-              <th>Statut</th>
-              <th style="white-space: nowrap;">Action</th>
+              <th data-i18n="table_name">Nom du fichier</th>
+              <th data-i18n="table_status">Statut</th>
+              <th style="white-space: nowrap;" data-i18n="table_action">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -172,9 +172,9 @@
           </div>
         </summary>
         <div class="load-container">
-          <button id="loadLigneDroite">Charger l'acquisition en ligne droite</button>
+          <button id="loadLigneDroite" data-i18n="straight_load">Charger l'acquisition en ligne droite</button>
           <div id="dropZoneLigneDroite" class="drop-zone">
-            ou déposez le fichier ici
+            <span data-i18n="single_drop">ou déposez le fichier ici</span>
           </div>
         </div>
       </details>
@@ -188,9 +188,9 @@
           </colgroup>
           <thead>
             <tr>
-              <th>Nom du fichier</th>
-              <th>Statut</th>
-              <th style="white-space: nowrap;">Action</th>
+              <th data-i18n="table_name">Nom du fichier</th>
+              <th data-i18n="table_status">Statut</th>
+              <th style="white-space: nowrap;" data-i18n="table_action">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -212,9 +212,9 @@
           </div>
         </summary>
         <div class="load-container">
-          <button id="loadAcquis">Charger la (les) acquisition(s) à traiter</button>
+          <button id="loadAcquis" data-i18n="acquis_load">Charger la (les) acquisition(s) à traiter</button>
           <div id="dropZoneAcquis" class="drop-zone">
-          ou déposez le(s) fichier(s) ici
+            <span data-i18n="multiple_drop">ou déposez le(s) fichier(s) ici</span>
           </div>
         </div>
       </details>
@@ -228,9 +228,9 @@
           </colgroup>
           <thead>
             <tr>
-              <th>Nom du fichier</th>
-              <th>Statut</th>
-              <th style="white-space: nowrap;">Action</th>
+              <th data-i18n="table_name">Nom du fichier</th>
+              <th data-i18n="table_status">Statut</th>
+              <th style="white-space: nowrap;" data-i18n="table_action">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -247,12 +247,12 @@
           <span class="btn-text" data-i18n="nouv_FRM">Nouveau FRM</span> 
       </button>
     
-      <button id="saveDataIMUBtn" class="highlight-btn" disabled autocomplete="off" data-i18n="run_pipeline">
+      <button id="saveDataIMUBtn" class="highlight-btn" disabled autocomplete="off" data-i18n="preprocessing_btn">
           Traiter les données
       </button>
     
       <button id="gotoIdentification" onclick="location.href='locomotion.html'">
-        <span class="btn-text" data-i18n="identification_button">Aller à l'identification des tâches </span>
+        <span class="btn-text" data-i18n="identification_button">Identification des tâches </span>
         <span class="btn-arrow">➪</span> 
       </button>
     </div>
@@ -328,7 +328,7 @@
 
   <!-- Boite modale Mentions légales -->
   <div id="modal-mentions" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" data-i18n-html="mentions_legal">
       <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
 
       <h2>Mentions légales</h2>
