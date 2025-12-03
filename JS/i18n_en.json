@@ -87,7 +87,8 @@
   "row_wrongformat": "Unsupported format (only CSV files are accepted)",
   "row_doublon": "File already loaded",
   "row_loaded": "Loaded",
-  "error_missingValue": "Missing data (NaN) in ",
+  "error_missingValue": "Missing data (NaN)",
   "error_missingData": "No data found for preprocessing save",
-  "error_missingCol": "Missing columns in "
+  "error_missingCol": "Missing columns"
 }
+
