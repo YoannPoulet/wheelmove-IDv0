@@ -252,12 +252,33 @@ if (toggle && onOpt && offOpt) {
   if (state && state.param) state.param.rayonMode = isOn ? 'rayon' : 'circonference';
 }
 
+// helper to update the toggle button text using i18n (keeps a data attribute with the active key)
+function updateToggleRayonsText() {
+  if (!toggleBtn) return;
+  const activeKey = toggleBtn.dataset.i18nActive || toggleBtn.getAttribute('data-i18n') || 'FRM_gauchedroite';
+  if (window.i18n && typeof window.i18n.t === 'function') {
+    try {
+      toggleBtn.textContent = window.i18n.t(activeKey);
+      return;
+    } catch (e) {
+      console.warn('i18n.t failed for', activeKey, e);
+    }
+  }
+  // fallback labels
+  if (activeKey === 'FRM_fusion') toggleBtn.textContent = '🗙 Fusionner gauche/droite';
+  else toggleBtn.textContent = '⚙️ Différencier gauche/droite';
+}
+
+// ensure the button has an initial i18n key so updateToggleRayonsText can work
+if (toggleBtn && !toggleBtn.dataset.i18nActive) toggleBtn.dataset.i18nActive = toggleBtn.getAttribute('data-i18n') || 'FRM_gauchedroite';
+
 toggleBtn.addEventListener('click', () => {
   modeDiff = !modeDiff;
-    if (modeDiff) {
+  if (modeDiff) {
     bloc.style.display = 'block';
     champUnique.disabled = true;
-    toggleBtn.textContent = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('FRM_fusion') : '🗙 Fusionner gauche/droite';
+    toggleBtn.dataset.i18nActive = 'FRM_fusion';
+    updateToggleRayonsText();
     gauche.value = champUnique.value || '';
     droite.value = champUnique.value || '';
     champUnique.value = '';
@@ -265,23 +286,31 @@ toggleBtn.addEventListener('click', () => {
     droite.dispatchEvent(new Event('input', { bubbles: true }));
     champUnique.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
-    bloc.style.display = 'none';
-    champUnique.disabled = false;
-    toggleBtn.textContent = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('FRM_gauchedroite') : '⚙️ Différencier gauche/droite';
-    const g = parseFloat(gauche.value);
-    const d = parseFloat(droite.value);
-    if (!isNaN(g)) {
-      champUnique.value = g;
-    } else {
-      if (!isNaN(d)) champUnique.value = d;
-    }
-    gauche.value = '';
-    droite.value = '';
-    gauche.dispatchEvent(new Event('input', { bubbles: true }));
-    droite.dispatchEvent(new Event('input', { bubbles: true }));
-    champUnique.dispatchEvent(new Event('input', { bubbles: true }));
-  }
+      bloc.style.display = 'none';
+      champUnique.disabled = false;
+      toggleBtn.dataset.i18nActive = 'FRM_gauchedroite';
+      updateToggleRayonsText();
+      const g = parseFloat(gauche.value);
+      const d = parseFloat(droite.value);
+      if (!isNaN(g)) {
+        champUnique.value = g;
+      } else {
+        if (!isNaN(d)) champUnique.value = d;
+      }
+      gauche.value = '';
+      droite.value = '';
+      gauche.dispatchEvent(new Event('input', { bubbles: true }));
+      droite.dispatchEvent(new Event('input', { bubbles: true }));
+      champUnique.dispatchEvent(new Event('input', { bubbles: true }));
+  } 
 });
+
+// Subscribe to language changes (if i18n provides onChange)
+if (window.i18n && typeof window.i18n.onChange === 'function') {
+  window.i18n.onChange(updateToggleRayonsText);
+}
+// Apply initial text (if translations already loaded)
+setTimeout(updateToggleRayonsText, 0);
 
 //------------ Boutons validation étape 2 -----------------------
 document.getElementById("validateStep2").addEventListener("click", () => {
