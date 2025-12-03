@@ -240,7 +240,7 @@ function markAcquisitionTreated(acqName) {
     if (!row) continue;
     const statusCell = row.querySelector('td:nth-child(2)');
     if (statusCell) {
-      statusCell.textContent = 'Traité ✅';
+      statusCell.textContent = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('table_done') : "Traité ✅";
     }
   }
 }
@@ -758,4 +758,3 @@ function pchipInterpolate(x, y, xi) {
   }
 
 })();
-
