@@ -12,6 +12,8 @@
   "valider": "Valider",
   "modifier": "Modifier",
   "export": "Exporter",
+  "load": "Charger",
+  "default": "Défaut",
   "mentions_link": "Mentions légales",
   "auteurs_link": "Contributeurs",
   "publication_link": "Publication associée",
@@ -69,6 +71,7 @@
   "table_name": "Nom du fichier",
   "table_status": "Statut",
   "table_action": "Action",
+  "table_done": "Traité ✅",
   "straight_load": "Charger l'acquisition en ligne droite",
   "acquis_load": "Charger la (les) acquisition(s) à traiter",
   "seuils_titre": "Paramètres de traitement",
@@ -83,5 +86,8 @@
   "showStatus_error": "❌ Erreur à l'enregistrement des résutlats",
   "row_wrongformat": "Format non supporté (seuls les CSV sont acceptés)",
   "row_doublon": "Fichier déjà chargé",
-  "row_loaded": "Chargé"
+  "row_loaded": "Chargé",
+  "error_missingValue": "Données manquantes (NaN) dans ",
+  "error_missingData": "Données introuvables pour sauvegarde du prétraitement",
+  "error_missingCol": "Colonnes manquantes dans "
 }
