@@ -3,75 +3,120 @@
   const defaults = { lang: 'fr' };
   let dict = {};
   let currentLang = defaults.lang;
-
-  // setText now only updates the text node, leaving images intact
-  function setText(el, value) {
-  if (el.hasAttribute('data-i18n-html')) {
-    el.innerHTML = value; // remplace tout le HTML
-  } else {
-    // seulement le texte à l’intérieur (ex: <span class="i18n-text">)
-    const textSpan = el.querySelector('.i18n-text');
-    if (textSpan) {
-      textSpan.textContent = value;
-    } else {
-      Array.from(el.childNodes).forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) node.textContent = value;
-      });
-    }
-  }
-}
+  const cache = {}; // cache loaded dictionaries by lang
+  const listeners = new Set();
 
   async function loadDict(lang) {
+    const normalized = (lang === 'en') ? 'en' : 'fr';
     try {
-      const res = await fetch(`JS/i18n_${lang}.json`);
-      if (!res.ok) throw new Error('Missing i18n file');
-      dict = await res.json();
+      if (cache[normalized]) {
+        dict = cache[normalized];
+      } else {
+        const res = await fetch(`JS/i18n_${normalized}.json`);
+        if (!res.ok) throw new Error('Missing i18n file');
+        dict = await res.json();
+        cache[normalized] = dict;
+      }
       applyTranslations();
-      document.documentElement.lang = lang === 'en' ? 'en' : 'fr';
-      localStorage.setItem('siteLang', lang);
-      currentLang = lang === 'en' ? 'en' : 'fr';
+      document.documentElement.lang = normalized === 'en' ? 'en' : 'fr';
+      localStorage.setItem('siteLang', normalized);
+      currentLang = normalized;
       updateLangFlagImages();
+      notifyChange();
+      return dict;
     } catch (e) {
       console.warn('i18n load failed', e);
+      throw e;
     }
   }
 
-  function applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+  // setText only updates the text node, leaving images intact
+  function setText(el, value) {
+    if (el.hasAttribute('data-i18n-html')) {
+      el.innerHTML = value;
+    } else {
+      // seulement le texte à l’intérieur (ex: <span class="i18n-text">)
+      const textSpan = el.querySelector('.i18n-text');
+      if (textSpan) {
+        textSpan.textContent = value;
+      } else {
+        Array.from(el.childNodes).forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) node.textContent = value;
+        });
+      }
+    }
+  }
+
+  function notifyChange(){
+    listeners.forEach(cb => {
+      try { cb(currentLang); } catch(e){ console.error('i18n listener error', e); }
+    });
+  }
+
+  function applyTranslations(root = document) {
+    root.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (!key) return;
-      if (dict[key] !== undefined) setText(el, dict[key]);
+      const val = lookup(key);
+      if (val !== undefined) setText(el, val);
     });
 
     // textes HTML formatés
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    root.querySelectorAll('[data-i18n-html]').forEach(el => {
       const key = el.getAttribute('data-i18n-html');
-      console.log(key);
-      console.log(dict[key]);
       if (!key) return;
-      if (dict[key] !== undefined) setText(el, dict[key]);
+      const val = lookup(key);
+      if (val !== undefined) setText(el, val);
     });
 
     // hrefs
-    document.querySelectorAll('[data-i18n-href]').forEach(el => {
+    root.querySelectorAll('[data-i18n-href]').forEach(el => {
       const key = el.getAttribute('data-i18n-href');
       if (!key) return;
-      if (dict[key] !== undefined) el.setAttribute('href', dict[key]);
+      const val = lookup(key);
+      if (val !== undefined) el.setAttribute('href', val);
     });
 
     // src
-    document.querySelectorAll('[data-i18n-src]').forEach(el => {
+    root.querySelectorAll('[data-i18n-src]').forEach(el => {
       const key = el.getAttribute('data-i18n-src');
       if (!key) return;
-      if (dict[key] !== undefined) el.setAttribute('src', dict[key]);
+      const val = lookup(key);
+      if (val !== undefined) el.setAttribute('src', val);
     });
 
     // optional download attr
-    document.querySelectorAll('[data-i18n-download]').forEach(el => {
+    root.querySelectorAll('[data-i18n-download]').forEach(el => {
       const key = el.getAttribute('data-i18n-download');
       if (!key) return;
-      if (dict[key] !== undefined) el.setAttribute('download', dict[key]);
+      const val = lookup(key);
+      if (val !== undefined) el.setAttribute('download', val);
     });
+  }
+
+  // lookup supports nested keys with dot-notation
+  function lookup(key){
+    if (!key) return undefined;
+    const parts = key.split('.');
+    let cur = dict;
+    for (let p of parts){
+      if (cur && Object.prototype.hasOwnProperty.call(cur, p)) cur = cur[p];
+      else return undefined;
+    }
+    return cur;
+  }
+
+  // fonction de traduction avec paramètres optionnels
+  function t(key, params){
+    let raw = lookup(key);
+    if (raw === undefined) return key;
+    if (typeof raw !== 'string') raw = String(raw);
+    if (params && typeof params === 'object'){
+      Object.keys(params).forEach(k => {
+        raw = raw.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]);
+      });
+    }
+    return raw;
   }
 
   function attachLangSelectors() {
@@ -98,15 +143,28 @@
     });
   }
 
+  // public listeners API
+  function onChange(cb){ listeners.add(cb); }
+  function offChange(cb){ listeners.delete(cb); }
+
+  function setLang(lang){ return loadDict(lang); }
+
   document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('siteLang');
     const navLang = (navigator.language || navigator.userLanguage || 'fr').startsWith('en') ? 'en' : 'fr';
     const lang = saved || navLang || defaults.lang;
-    loadDict(lang);
+    loadDict(lang).catch(()=>{});
     attachLangSelectors();
   });
 
-  window._i18n = { load: loadDict };
+  // expose a stable API for other scripts
+  window.i18n = window.i18n || {};
+  window.i18n.t = t;
+  window.i18n.load = loadDict;
+  window.i18n.setLang = setLang;
+  window.i18n.onChange = onChange;
+  window.i18n.offChange = offChange;
+  window.i18n.applyToDOM = applyTranslations;
+  Object.defineProperty(window.i18n, 'currentLang', { get: () => currentLang });
+
 })();
-
-
