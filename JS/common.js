@@ -119,14 +119,14 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
     } catch (e) {
       statusCell.textContent = status;
     }
-    // subscribe to language changes
+      // subscribe to language changes
     if (window.i18n && typeof window.i18n.onChange === 'function') {
       const updater = () => {
         try { statusCell.textContent = window.i18n.t(statusKey); } catch (e) { /* ignore */ }
       };
       window.i18n.onChange(updater);
-      // store reference on cell in case future removal is desired
-      statusCell.dataset.i18nListener = '1';
+      // keep a direct reference so we can unregister later
+      statusCell._i18nUpdater = updater;
     }
   } else {
     statusCell.textContent = status;
@@ -153,6 +153,14 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
   removeBtn.dataset.acqName = acqName || filename.replace(/\.csv$/i, '');
 
   removeBtn.addEventListener('click', () => {
+    // before removing the row, unregister any i18n listener attached to the status cell
+    try {
+      const statusCellBefore = row.querySelector('td:nth-child(2)');
+      if (statusCellBefore && statusCellBefore._i18nUpdater && window.i18n && typeof window.i18n.offChange === 'function') {
+        try { window.i18n.offChange(statusCellBefore._i18nUpdater); } catch(e) { /* ignore */ }
+        try { delete statusCellBefore._i18nUpdater; } catch(e) { /* ignore */ }
+      }
+    } catch(e) { /* ignore */ }
     row.remove();
 
     const appState = getAppState();
