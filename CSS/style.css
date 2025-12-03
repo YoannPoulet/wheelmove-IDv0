@@ -705,5 +705,4 @@ summary .summary-buttons button:not([disabled]) { cursor: pointer !important; }
 }
 .help-menu .help-menu-item:hover {
   background: #f5f5f5;
-
 }
