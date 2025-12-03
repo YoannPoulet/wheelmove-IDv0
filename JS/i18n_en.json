@@ -80,5 +80,9 @@
   "showStatus_resultsSaved": "✅ Results saved",
   "showStatus_pending": "In progress…",
   "showStatus_done": "✅ Processing complete!",
-  "showStatus_error": "❌ Error while saving results"
+  "showStatus_error": "❌ Error while saving results",
+  "row_wrongformat": "Unsupported format (only CSV files are accepted)",
+  "row_doublon": "File already loaded",
+  "row_loaded": "Loaded"
 }
+
