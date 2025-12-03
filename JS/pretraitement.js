@@ -180,7 +180,7 @@ class Acquisition {
     ];
     const hasNaN = arraysToCheck.some(arr => Array.isArray(arr) && arr.some(v => Number.isNaN(v)));
     if (hasNaN) {
-      throw new Error("Données manquantes (NaN) dans " + this.fileName);
+      throw new Error((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('error_missingValue') : "Données manquantes (NaN) dans " + this.fileName);
     }
   }
 }
@@ -946,7 +946,7 @@ function sauvegardePretraitement(acq) {
 
 
   if (!Array.isArray(vitLin) || !Array.isArray(vitAngDegs)) {
-    console.error("Données introuvables pour sauvegarde du prétraitement");
+    console.error((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('error_missingData') : "Données introuvables pour sauvegarde du prétraitement");
     return;
   }
   const CSVprttmtname = acq.fileName + '_preprocessed.csv';
