@@ -254,20 +254,20 @@ if (toggle && onOpt && offOpt) {
 
 toggleBtn.addEventListener('click', () => {
   modeDiff = !modeDiff;
-  if (modeDiff) {
+    if (modeDiff) {
     bloc.style.display = 'block';
     champUnique.disabled = true;
-    toggleBtn.textContent = '🗙 Fusionner gauche/droite';
+    toggleBtn.textContent = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('FRM_fusion') : '🗙 Fusionner gauche/droite';
     gauche.value = champUnique.value || '';
     droite.value = champUnique.value || '';
     champUnique.value = '';
     gauche.dispatchEvent(new Event('input', { bubbles: true }));
     droite.dispatchEvent(new Event('input', { bubbles: true }));
     champUnique.dispatchEvent(new Event('input', { bubbles: true }));
-  } else {
+    } else {
     bloc.style.display = 'none';
     champUnique.disabled = false;
-    toggleBtn.textContent = '⚙️ Différencier gauche/droite';
+    toggleBtn.textContent = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('FRM_gauchedroite') : '⚙️ Différencier gauche/droite';
     const g = parseFloat(gauche.value);
     const d = parseFloat(droite.value);
     if (!isNaN(g)) {
@@ -412,7 +412,6 @@ document.getElementById("validateStep3").addEventListener("click", () => {
   const hasStat = appState && Array.isArray(appState.acquisitions) && appState.acquisitions.some(a => a.category === 'Statique');
   if (hasStat) unlockStep("step3", "step4", "tickStep3");
   if (hasStat && typeof setFileTableButtonsState === 'function') setFileTableButtonsState('Statique', true);
-  else showInlineMessage('step3', "Veuillez charger une acquisition statique.");
 });
 
 // Validation étape 4 : nécessite au moins une ligne droite chargée (dans state.acquisitions)
@@ -421,7 +420,6 @@ document.getElementById("validateStep4").addEventListener("click", () => {
   const hasLigne = appState && Array.isArray(appState.acquisitions) && appState.acquisitions.some(a => a.category === 'LigneDroite');
   if (hasLigne) unlockStep("step4", "step5", "tickStep4");
   if (hasLigne && typeof setFileTableButtonsState === 'function') setFileTableButtonsState('LigneDroite', true);
-  else showInlineMessage('step4', "Veuillez charger une acquisition en ligne droite.");
 });
 
 // Validation étape 5 : nécessite au moins une acquisition à traiter chargée (dans state.acquisitions)
@@ -436,7 +434,6 @@ document.getElementById("validateStep5").addEventListener("click", () => {
     unlockStep("step5", null, "tickStep5");
     // Désactiver les boutons d'action dans le tableau des acquisitions traitées
     if (typeof setFileTableButtonsState === 'function') setFileTableButtonsState('Acquis', true);
-    else showInlineMessage('step5', "Veuillez charger au moins une acquisition à traiter.");
   }
 });
 
@@ -556,7 +553,7 @@ document.getElementById("saveDataIMUBtn").addEventListener("click", () => {
   
   //Message enregistrement réussi
   console.log("%%%%% Fin du traitement des acquisitions %%%%%");
-  showStatus("✅ Résultats enregistrés dans le dossier /Téléchargements !", "success","statusMsgSaveIMU");
+  showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_savepreprocess') : "✅ Résultats enregistrés dans le dossier /Téléchargements !", "success","statusMsgSaveIMU");
 });
 
 // Affichage automatique des tick de validation
@@ -952,12 +949,17 @@ function sauvegardePretraitement(acq) {
     console.error("Données introuvables pour sauvegarde du prétraitement");
     return;
   }
-  const CSVprttmtname = acq.fileName + '_pretraitement.csv';
+  const CSVprttmtname = acq.fileName + '_preprocessed.csv';
   
   const n = Math.min(vitLin.length, vitAngDegs.length);
 
-  // Création du CSV : en-tête
-  const header = ["Temps (s)", "Vitesse lineaire (m/s)", "Vitesse angulaire (deg/s)"];
+  // Création du CSV : en-tête (use i18n if available)
+  const detectedLang = (window.i18n && window.i18n.currentLang) ? window.i18n.currentLang : (localStorage.getItem('siteLang') || ((navigator.language || navigator.userLanguage || 'fr').startsWith('en') ? 'en' : 'fr'));
+  const header = [
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_time') : (detectedLang === 'en' ? 'Time (s)' : 'Temps (s)'),
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : (detectedLang === 'en' ? 'Linear velocity (m/s)' : 'Vitesse lineaire (m/s)'),
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : (detectedLang === 'en' ? 'Angular velocity (deg/s)' : 'Vitesse angulaire (deg/s)')
+  ];
   const lines = [header];
   for (let i = 0; i < n; i++) {
     const t = (i / fs).toFixed(3); // arrondi à la milliseconde
