@@ -87,7 +87,8 @@
   "row_wrongformat": "Format non supporté (seuls les CSV sont acceptés)",
   "row_doublon": "Fichier déjà chargé",
   "row_loaded": "Chargé",
-  "error_missingValue": "Données manquantes (NaN) dans ",
+  "error_missingValue": "Données manquantes (NaN)",
   "error_missingData": "Données introuvables pour sauvegarde du prétraitement",
-  "error_missingCol": "Colonnes manquantes dans "
+  "error_missingCol": "Colonnes manquantes"
 }
+
