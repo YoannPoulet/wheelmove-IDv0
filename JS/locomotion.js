@@ -99,7 +99,9 @@ class Acquisition {
 
 //Initialisation de seuils au chargement de la page
 window.addEventListener("DOMContentLoaded", () => {
-    setDefaultSeuils(); //Charger les valeurs par défaut des seuils
+    i18n.onChange(() => {
+        setDefaultSeuils(); //Charger les valeurs par défaut des seuils
+    });
     updateSeuilsFromInputs(); // Synchroniser les variables JS avec les inputs
 
     // Cacher les paramètres
@@ -1012,3 +1014,4 @@ function affichageParametresSeuils() {
   document.getElementById('btnValidateFilesParam').disabled = false;
   document.getElementById("btnValidateFilesParam").classList.add("highlight-btn");
 }
+
