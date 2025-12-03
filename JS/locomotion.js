@@ -36,12 +36,12 @@ const state = {
 
 //Couleur des tâches
 const TASKS = {
-  1: { label: "Statique", color: "rgba(255,0,0,0.2)" },
-  2: { label: "Propulsion avant", color: "rgba(0,255,0,0.2)" },
-  3: { label: "Propulsion arrière", color: "rgba(255,255,0,0.2)" },
-  4: { label: "Pivot", color: "rgba(255,0,255,0.2)" },
-  5: { label: "Virage serré", color: "rgba(0,255,255,0.2)" },
-  6: { label: "Virage large", color: "rgba(0,0,255,0.2)" }
+  1: { label: 'Statique', color: "rgba(255,0,0,0.2)" },
+  2: { label: 'Propulsion avant', color: "rgba(0,255,0,0.2)" },
+  3: { label: 'Propulsion arrière', color: "rgba(255,255,0,0.2)" },
+  4: { label: 'Pivot', color: "rgba(255,0,255,0.2)" },
+  5: { label: 'Virage serré', color: "rgba(0,255,255,0.2)" },
+  6: { label: 'Virage large', color: "rgba(0,0,255,0.2)" }
 };
 
 // Classe Acquisition
@@ -95,7 +95,7 @@ class Acquisition {
 
 // ================ Gestion dynamique de la page (légendes et seuils)  ===================
 // Générer la légende au chargement de la page
-document.addEventListener("DOMContentLoaded", renderLegend);
+// document.addEventListener("DOMContentLoaded", renderLegend);
 
 //Initialisation de seuils au chargement de la page
 window.addEventListener("DOMContentLoaded", () => {
@@ -198,7 +198,7 @@ dropZone.addEventListener("drop", async (e) => {
 
 // 1.5 Bouton validation des fichiers et paramètres
 document.getElementById('btnValidateFilesParam').addEventListener('click', () => {
-  showStatus("✅ Fichiers et paramètres validés", "success", "statusMsgValidate", 3000);
+  showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_validatefilesparam') : "✅ Fichiers et paramètres validés", "success", "statusMsgValidate", 3000);
   updateSeuilsFromInputs()
 
   //Cacher les paramètres
@@ -219,7 +219,7 @@ document.getElementById('btnValidateFilesParam').addEventListener('click', () =>
 //2. Bouton calcul des tâches et plot graphe
 document.getElementById('btnRunPipeline').addEventListener('click', () => {
     document.getElementById("chronogrammesContainer").innerHTML = ""; // Vider les chronogrammes précédents
-    state.segmentationSize = state.freqAcq / 4; //Fenêtre de traitement de 0.25s (choix arbitraire)
+    // state.segmentationSize = state.freqAcq / 4; //Fenêtre de traitement de 0.25s (choix arbitraire)
     processFilesOnebyOne();
 
     //Enlever la mise en forme du bouton
@@ -254,7 +254,6 @@ document.getElementById("resetSeuilsBtn").addEventListener("click", () => {
 document.getElementById("chkVitLin").addEventListener("change", (e) => {
     state.showVitLin = e.target.checked;
     if (!state.acquisitions || state.acquisitions.length === 0) return;
-
     state.acquisitions.forEach(acq => {
         plotChronogramme(acq);
     });
@@ -280,7 +279,7 @@ document.getElementById('saveDataBtn').addEventListener('click', () => {
     });
 
     //Message enregistrement réussi
-    showStatus("✅ Résultats enregistrés", "success","statusMsgSave");
+    showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_resultsSaved') : "✅ Résultats enregistrés", "success","statusMsgSave");
 
     //Enlever la mise en forme du bouton
     document.getElementById("saveDataBtn").classList.remove("highlight-btn");
@@ -298,7 +297,7 @@ async function processFilesOnebyOne() {
     return;
   }
 
-  showStatus("En cours …", "processing", "statusMsgRun");
+  showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_pending') : "En cours …", "processing", "statusMsgRun");
   // Forcer un rafraîchissement et un délai avant les calculs 
   await new Promise(resolve => requestAnimationFrame(resolve));
   await new Promise(resolve => setTimeout(resolve, 20)); 
@@ -308,7 +307,7 @@ async function processFilesOnebyOne() {
     await runPipelineAsync(acq);  // attendre la fin avant de passer au suivant
   }
 
-  showStatus("✅ Traitement terminé !", "success", "statusMsgRun", 3000);
+  showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_done') : "✅ Traitement terminé !", "success", "statusMsgRun", 3000);
   console.log("%%% Traitement de toutes les acquisitions terminé %%%");
 }
 
@@ -694,8 +693,7 @@ function plotChronogramme(acq) {
     ? { min: Math.min(...acq.vitAngDegSec), max: Math.max(...acq.vitAngDegSec) }
     : null;
 
-  // Déterminer les bornes globales pour forcer un zéro commun
-  // Déterminer des bornes séparées pour les deux signaux afin de ne pas forcer
+   // Déterminer des bornes séparées pour les deux signaux afin de ne pas forcer
   // les deux axes à partager la même échelle (ce qui rendrait la lecture mauvaise)
   function paddedRange(min, max) {
     // s'assurer que min/max incluent zéro
@@ -741,7 +739,7 @@ function plotChronogramme(acq) {
       y: acq.vitLin,
       // y: acq.RayonCourbure,
       mode: "lines",
-      name: "Vitesse linéaire",
+      name: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : "Vitesse lineaire (m/s)",
       line: { color: "black", width: 2 },
       yaxis: "y"
     });
@@ -751,7 +749,7 @@ function plotChronogramme(acq) {
       x: Array.from({ length: acq.nbFrames }, (_, i) => i),
       y: acq.vitAngDegSec,
       mode: "lines",
-      name: "Vitesse angulaire",
+      name: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : "Vitesse angulaire (deg/s)",
       line: { color: "orange", width: 2 },
       yaxis: state.showVitLin ? "y2" : "y" // si seule → axe gauche, sinon → axe droit
     });
@@ -792,12 +790,12 @@ function plotChronogramme(acq) {
   // Cas 1 : les deux vitesses sont affichées → double axe
   if (state.showVitLin && state.showVitAng) {
     layout.yaxis = {
-      title: { text: "Vitesse linéaire (m/s)" },
+      title: { text: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : "Vitesse lineaire (m/s)" },
       side: "left",
       range: yRangeLin || undefined
     };
     layout.yaxis2 = {
-      title: { text: "Vitesse angulaire (°/s)" },
+      title: { text: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : "Vitesse angulaire (deg/s)" },
       side: "right",
       overlaying: "y",
       range: yRangeAng || undefined
@@ -806,7 +804,7 @@ function plotChronogramme(acq) {
   // Cas 2 : seule la vitesse linéaire
   else if (state.showVitLin) {
     layout.yaxis = {
-      title: { text: "Vitesse linéaire (m/s)" },
+      title: { text: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : "Vitesse lineaire (m/s)"},
       side: "left",
       range: yRangeLin || undefined
     };
@@ -814,7 +812,7 @@ function plotChronogramme(acq) {
   // Cas 3 : seule la vitesse angulaire
   else if (state.showVitAng) {
     layout.yaxis = {
-      title: { text: "Vitesse angulaire (°/s)" },
+      title: { text: (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : "Vitesse angulaire (deg/s)" },
       side: "left",
       range: yRangeAng || undefined
     };
@@ -834,13 +832,18 @@ function plotChronogramme(acq) {
 function saveDataCSV(acq) {
   if (!acq.vitLin || !acq.vitAngDegSec || !acq.signalUnique) {
     //Message enregistrement réussi
-    showStatus("❌ Erreur à l'enregistrement des résutlats", "error","statusMsgSave");
+    showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_error') : "❌ Erreur à l'enregistrement des résutlats", "error","statusMsgSave");
     return;
   }
-  const CSVresultname = acq.fileName + '_resultats.csv';
+  const CSVresultname = acq.fileName + '_results.csv';
 
   // Création du CSV : en-tête
-  const header = ["Vitesse lineaire (m/s)", "Vitesse angulaire (deg/s)", "Actions locomotrices"];
+  const detectedLang = (window.i18n && window.i18n.currentLang) ? window.i18n.currentLang : (localStorage.getItem('siteLang') || ((navigator.language || navigator.userLanguage || 'fr').startsWith('en') ? 'en' : 'fr'));
+  const header = [
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : (detectedLang === 'en' ? 'Linear velocity (m/s)' : 'Vitesse lineaire (m/s)'),
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : (detectedLang === 'en' ? 'Angular velocity (deg/s)' : 'Vitesse angulaire (deg/s)'),
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_actions') : (detectedLang === 'en' ? 'Tasks' : 'Actions locomotrices')
+  ];
   const rows = [header.join(";")];
 
   for (let i = 0; i < acq.nbFrames; i++) {
@@ -906,12 +909,12 @@ function exportJson(isLegend = false) {
   let params = {};
   if (isLegend) {
     params = {
-      "1": TASKS[1].label,
-      "2": TASKS[2].label,
-      "3": TASKS[3].label,
-      "4": TASKS[4].label,
-      "5": TASKS[5].label,
-      "6": TASKS[6].label,
+      "1": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_statique') : TASKS[1].label,
+      "2": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_prop_avant') : TASKS[2].label,
+      "3": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_prop_arriere') : TASKS[3].label,
+      "4": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_pivot') : TASKS[4].label,
+      "5": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_virage_serre') : TASKS[5].label,
+      "6": (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('legend_virage_large') : TASKS[6].label,
       };
       console.log(params);
   } else {
@@ -950,45 +953,45 @@ function exportJson(isLegend = false) {
 
 //---------------- Légende chronogrammes -----------------------
 //pour que la légende et les chronogrmame aient toujours les mêmes couleurs
-function renderLegend() {
-  const container = document.querySelector(".legend-grid");
-  if (!container) return;
+// function renderLegend() {
+//   const container = document.querySelector(".legend-grid");
+//   if (!container) return;
 
-  container.innerHTML = ""; // vider
+//   container.innerHTML = ""; // vider
 
-  // Ordre voulu
-  const col1 = [1, 2, 3];
-  const col2 = [4, 5, 6];
+//   // Ordre voulu
+//   const col1 = [1, 2, 3];
+//   const col2 = [4, 5, 6];
 
-  // Créer deux colonnes
-  const col1Div = document.createElement("div");
-  const col2Div = document.createElement("div");
+//   // Créer deux colonnes
+//   const col1Div = document.createElement("div");
+//   const col2Div = document.createElement("div");
 
-  col1.forEach(id => {
-    const { label, color } = TASKS[id];
-    const item = document.createElement("div");
-    item.className = "legend-item";
-    item.innerHTML = `
-      <span class="color-box" style="background-color:${color}">${id}</span>
-      ${label}
-    `;
-    col1Div.appendChild(item);
-  });
+//   col1.forEach(id => {
+//     const { label, color } = TASKS[id];
+//     const item = document.createElement("div");
+//     item.className = "legend-item";
+//     item.innerHTML = `
+//       <span class="color-box" style="background-color:${color}">${id}</span>
+//       ${label}
+//     `;
+//     col1Div.appendChild(item);
+//   });
 
-  col2.forEach(id => {
-    const { label, color } = TASKS[id];
-    const item = document.createElement("div");
-    item.className = "legend-item";
-    item.innerHTML = `
-      <span class="color-box" style="background-color:${color}">${id}</span>
-      ${label}
-    `;
-    col2Div.appendChild(item);
-  });
+//   col2.forEach(id => {
+//     const { label, color } = TASKS[id];
+//     const item = document.createElement("div");
+//     item.className = "legend-item";
+//     item.innerHTML = `
+//       <span class="color-box" style="background-color:${color}">${id}</span>
+//       ${label}
+//     `;
+//     col2Div.appendChild(item);
+//   });
 
-  container.appendChild(col1Div);
-  container.appendChild(col2Div);
-}
+//   container.appendChild(col1Div);
+//   container.appendChild(col2Div);
+// }
 
 // -------------Afficher les paramètres après clic sur bouton chargement ------------
 function affichageParametresSeuils() {
