@@ -53,7 +53,8 @@ async function handleFiles(files, category = null) {
       const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
       addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
     } catch (err) {
-      addFileRow(visibleName, err && err.message ? err.message : String(err), true, idForRow, fileNameWithoutExt);
+      const msgerr = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(err.message) : err.message;
+      addFileRow(visibleName, msgerr, true, idForRow, fileNameWithoutExt, err.message);
     }
   }
 
