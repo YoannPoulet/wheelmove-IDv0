@@ -98,6 +98,7 @@
         </summary>
         <!-- AJOUTER LE CHOIX DE FENETRE DE TRAITEMENT (SEGMENTATION) -->
           <label data-i18n="frequence">Fréquence d'acquisition (Hz) : <input type="number" id="freqAcq" step="10"></label>
+          <label data-i18n="segmentation">Durée de segmentation (s) : <input type="number" id="inptSegmentsec" step="0.01"></label>
           <table class="fixed-table" data-i18n-html="seuils_table">
             <tr>
               <th>Signal</th>
@@ -109,7 +110,7 @@
             </tr>
 
             <tr>
-              <td>Vitesse linéaire<br>absolue</td>
+              <td>Vitesse linéaire<br>absolue (m/s)</td>
               <td>Statique</td>
               <td><input type="number" id="seuilVitLinAbs" step="0.1"></td>
               <td>En mouvement</td>
@@ -276,4 +277,3 @@
 
 </body>
 </html>
-
