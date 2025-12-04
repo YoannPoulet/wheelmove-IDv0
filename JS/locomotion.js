@@ -147,10 +147,14 @@ function setDefaultSeuils() {
     document.getElementById("newSeuilVitAngAbs").value = state.defSeuils.secondSeuil_vitAngAbs;
 }
 
+document.getElementById("freqAcq").addEventListener("input", () => {
+  document.getElementById("inptSegmentsec").value = document.getElementById("freqAcq").value / 400;
+});
+
 function updateSeuilsFromInputs() {
     state.freqAcq = parseFloat(document.getElementById("freqAcq").value);
     state.segmentationSec = parseFloat(document.getElementById("inptSegmentsec").value);
-    state.segmentationSize = state.segmentationSec * state.freqAcq;
+    state.segmentationSize = parseFloat(state.segmentationSec * state.freqAcq);
     state.seuils.vitLinAbs = parseFloat(document.getElementById("seuilVitLinAbs").value);
     state.seuils.vitAngAbs = parseFloat(document.getElementById("seuilVitAngAbs").value);
     state.seuils.rayonSerre  = parseFloat(document.getElementById("seuilRayonMin").value);
