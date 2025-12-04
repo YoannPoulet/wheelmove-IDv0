@@ -4,6 +4,7 @@ const state = {
   currentAcq: null,       // Acquisition en cours
   freqAcq: 100,           // Fréquence d’échantillonnage
   segmentationSize: 25,   // Taille fenêtre segmentation
+  segmentationSec: 0.25,  // Durée fenêtre segmentation en secondes
   maxLookBack: 30,       // Combien de frames pour affinage seuils
   maxLookAhead: 30,      // Combien de frames pour affinage seuils
 
@@ -21,6 +22,8 @@ const state = {
   // Valeurs par défaut pour reset
   defSeuils: {
     freqAcq: 100,
+    segmentationSize: 25,
+    segmentationSec: 0.25,
     vitLinAbs: 0.5,
     vitAngAbs: 40,
     rayonSerre: 0.2,
@@ -135,6 +138,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function setDefaultSeuils() {
     document.getElementById("freqAcq").value = state.defSeuils.freqAcq;
+    document.getElementById("inptSegmentsec").value = state.defSeuils.segmentationSec;
     document.getElementById("seuilVitLinAbs").value = state.defSeuils.vitLinAbs
     document.getElementById("seuilVitAngAbs").value = state.defSeuils.vitAngAbs;
     document.getElementById("seuilRayonMin").value = state.defSeuils.rayonSerre;
@@ -145,6 +149,8 @@ function setDefaultSeuils() {
 
 function updateSeuilsFromInputs() {
     state.freqAcq = parseFloat(document.getElementById("freqAcq").value);
+    state.segmentationSec = parseFloat(document.getElementById("inptSegmentsec").value);
+    state.segmentationSize = state.segmentationSec * state.freqAcq;
     state.seuils.vitLinAbs = parseFloat(document.getElementById("seuilVitLinAbs").value);
     state.seuils.vitAngAbs = parseFloat(document.getElementById("seuilVitAngAbs").value);
     state.seuils.rayonSerre  = parseFloat(document.getElementById("seuilRayonMin").value);
@@ -221,7 +227,6 @@ document.getElementById('btnValidateFilesParam').addEventListener('click', () =>
 //2. Bouton calcul des tâches et plot graphe
 document.getElementById('btnRunPipeline').addEventListener('click', () => {
     document.getElementById("chronogrammesContainer").innerHTML = ""; // Vider les chronogrammes précédents
-    // state.segmentationSize = state.freqAcq / 4; //Fenêtre de traitement de 0.25s (choix arbitraire)
     processFilesOnebyOne();
 
     //Enlever la mise en forme du bouton
@@ -893,6 +898,7 @@ function importJson() {
 
         // Mise à jour des inputs HTML si les clés existent
         if (data.freqAcq !== undefined) document.getElementById("freqAcq").value = data.freqAcq;
+        if (data.segmentationSec !== undefined) document.getElementById("inptSegmentsec").value = data.segmentationSec;
         if (data.seuilVitLinAbs !== undefined) document.getElementById("seuilVitLinAbs").value = data.seuilVitLinAbs;
         if (data.seuilVitAngAbs !== undefined) document.getElementById("seuilVitAngAbs").value = data.seuilVitAngAbs;
         if (data.seuilRayonMin !== undefined) document.getElementById("seuilRayonMin").value = data.seuilRayonMin;
@@ -922,6 +928,7 @@ function exportJson(isLegend = false) {
   } else {
     params = {
       freqAcq: parseFloat(document.getElementById("freqAcq").value) || null,
+      inptSegmentsec: parseFloat(document.getElementById("inptSegmentsec").value) || null,
 
       seuilVitLinAbs: parseFloat(document.getElementById("seuilVitLinAbs").value) || null,
       seuilVitAngAbs: parseFloat(document.getElementById("seuilVitAngAbs").value) || null,
