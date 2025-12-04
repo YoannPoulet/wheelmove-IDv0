@@ -46,6 +46,7 @@
   "intro_text": "<p>Welcome to this application for analyzing locomotor actions in Manual Wheelchairs (MWC). This application allows you to:</p><ul><li>Determine the linear and angular speeds of the MWC from inertial measurement unit data.</li><li>Automatically identify locomotor tasks by customizing the thresholds used.</li><li>Visualize the results in clear, simplified chronograms.</li><li>Export the results in CSV format for further processing.</li></ul><p>Before getting started, it is important to:</p><ul><li>Carefully read the file loading instructions (Help button at the top right).</li><li>Ensure that the recorded data is complete, as incomplete data is not handled by this application.</li><li>Understand how the processing works and the meaning of the chronograms by reading the help section or the publication associated with this work (at the bottom of the page).</li></ul><p>Once you have reviewed all this information, use the buttons below to navigate through the application.</p>",
   "mentions_legal": "<h2>Legal notice</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vivamus id urna eget ligula dictum fringilla at nec ipsum. Aenean vel nibh ac odio aliquet cursus. Donec id pretium arcu. Suspendisse congue dictum dolor, vitae eleifend lorem suscipit a.</p><p>Curabitur convallis tempus lacus at varius. Morbi nec iaculis tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sodales est vel sem fermentum, ac aliquam velit porttitor. Integer vehicula libero nec urna sagittis, eget vulputate turpis tempor.</p><p>Vivamus non interdum leo. Donec laoreet ullamcorper magna, eu condimentum libero placerat vitae. Vestibulum consequat nec sapien id fermentum. In hac habitasse platea dictumst.</p>",
   "frequence": "Acquisition frequency (Hz): ",
+  "segmentation": "Segmentation duration (s): ", 
   "initial_filter_choice": "Initial filtering of gyroscope and accelerometer data:",
   "initial_filter_none": "None",
   "initial_filter_MA": "Moving average",
@@ -75,7 +76,7 @@
   "straight_load": "Load straight-line acquisition",
   "acquis_load": "Load the acquisition(s) to process",
   "seuils_titre": "<strong>Processing parameters</strong>",
-  "seuils_table": "<tr><th>Signal</th><th>State 1</th><th>Threshold</th><th>State 2</th><th>Threshold</th><th>State 3</th></tr><tr><td>Absolute<br>linear speed</td><td>Static</td><td><input type=\"number\" id=\"seuilVitLinAbs\" step=\"0.1\"></td><td>In motion</td><td>—</td><td>—</td></tr><tr><td>Angular speed<br>(°/s)</td><td>Straight line</td><td><input type=\"number\" id=\"seuilVitAngAbs\" step=\"1\"></td><td>Turning</td><td>—</td><td>—</td></tr><tr><td>Radius of curvature (m)</td><td>In-place turn</td><td><input type=\"number\" id=\"seuilRayonMin\" step=\"0.1\"></td><td>Tight turn</td><td><input type=\"number\" id=\"seuilRayonMax\" step=\"0.1\"></td><td>Wide turn</td></tr></table>",
+  "seuils_table": "<tr><th>Signal</th><th>State 1</th><th>Threshold</th><th>State 2</th><th>Threshold</th><th>State 3</th></tr><tr><td>Absolute linear<br>speed  (m/s)</td><td>Static</td><td><input type=\"number\" id=\"seuilVitLinAbs\" step=\"0.1\"></td><td>In motion</td><td>—</td><td>—</td></tr><tr><td>Angular speed<br>(°/s)</td><td>Straight line</td><td><input type=\"number\" id=\"seuilVitAngAbs\" step=\"1\"></td><td>Turning</td><td>—</td><td>—</td></tr><tr><td>Radius of curvature (m)</td><td>In-place turn</td><td><input type=\"number\" id=\"seuilRayonMin\" step=\"0.1\"></td><td>Tight turn</td><td><input type=\"number\" id=\"seuilRayonMax\" step=\"0.1\"></td><td>Wide turn</td></tr></table>",
   "seuils_newseuilvitLin": "New vitLinAbs threshold: ",
   "seuils_newseuilvitAng": "New vitAngAbs threshold: ",
   "showStatus_savepreprocess": "✅ Results saved in the /Downloads folder!",
@@ -91,4 +92,3 @@
   "error_missingData": "No data found for preprocessing save",
   "error_missingCol": "Missing columns"
 }
-
