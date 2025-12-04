@@ -147,10 +147,6 @@ function setDefaultSeuils() {
     document.getElementById("newSeuilVitAngAbs").value = state.defSeuils.secondSeuil_vitAngAbs;
 }
 
-document.getElementById("freqAcq").addEventListener("input", () => {
-  document.getElementById("inptSegmentsec").value = document.getElementById("freqAcq").value / 400;
-});
-
 function updateSeuilsFromInputs() {
     state.freqAcq = parseFloat(document.getElementById("freqAcq").value);
     state.segmentationSec = parseFloat(document.getElementById("inptSegmentsec").value);
@@ -1025,3 +1021,4 @@ function affichageParametresSeuils() {
   document.getElementById('btnValidateFilesParam').disabled = false;
   document.getElementById("btnValidateFilesParam").classList.add("highlight-btn");
 }
+
