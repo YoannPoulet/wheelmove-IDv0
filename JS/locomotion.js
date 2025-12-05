@@ -898,7 +898,7 @@ function importJson() {
 
         // Mise à jour des inputs HTML si les clés existent
         if (data.freqAcq !== undefined) document.getElementById("freqAcq").value = data.freqAcq;
-        if (data.segmentationSec !== undefined) document.getElementById("inptSegmentsec").value = data.segmentationSec;
+        if (data.inptSegmentsec !== undefined) document.getElementById("inptSegmentsec").value = data.inptSegmentsec;
         if (data.seuilVitLinAbs !== undefined) document.getElementById("seuilVitLinAbs").value = data.seuilVitLinAbs;
         if (data.seuilVitAngAbs !== undefined) document.getElementById("seuilVitAngAbs").value = data.seuilVitAngAbs;
         if (data.seuilRayonMin !== undefined) document.getElementById("seuilRayonMin").value = data.seuilRayonMin;
