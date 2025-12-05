@@ -7,7 +7,9 @@
   const listeners = new Set();
 
   async function loadDict(lang) {
-    const normalized = (lang === 'en') ? 'en' : 'fr';
+    const supported = ['fr', 'en', 'es'];
+    const normalized = supported.includes(lang) ? lang : 'fr';
+
     try {
       if (cache[normalized]) {
         dict = cache[normalized];
@@ -18,7 +20,7 @@
         cache[normalized] = dict;
       }
       applyTranslations();
-      document.documentElement.lang = normalized === 'en' ? 'en' : 'fr';
+      document.documentElement.lang = normalized;
       localStorage.setItem('siteLang', normalized);
       currentLang = normalized;
       updateLangFlagImages();
@@ -118,31 +120,7 @@
     }
     return raw;
   }
-
-  function attachLangSelectors() {
-    document.querySelectorAll('.lang-flag').forEach(el => {
-      el.addEventListener('click', (ev) => {
-        ev.preventDefault();
-        const newLang = currentLang === 'en' ? 'fr' : 'en';
-        loadDict(newLang);
-      });
-    });
-  }
-
-  function updateLangFlagImages() {
-    const flagFor = currentLang === 'en' ? 'fr' : 'en';
-    const imgSrc = flagFor === 'fr' ? 'assets/flag-fr.png' : 'assets/flag-en.png';
-    const imgAlt = flagFor === 'fr' ? 'FR' : 'EN';
-    document.querySelectorAll('.lang-flag').forEach(el => {
-      const img = el.querySelector('img');
-      if (img) {
-        img.src = imgSrc;
-        img.alt = imgAlt;
-      }
-      el.setAttribute('data-lang', flagFor);
-    });
-  }
-
+  
   // public listeners API
   function onChange(cb){ listeners.add(cb); }
   function offChange(cb){ listeners.delete(cb); }
@@ -151,10 +129,88 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('siteLang');
-    const navLang = (navigator.language || navigator.userLanguage || 'fr').startsWith('en') ? 'en' : 'fr';
-    const lang = saved || navLang || defaults.lang;
-    loadDict(lang).catch(()=>{});
-    attachLangSelectors();
+    const navLang = (navigator.language || navigator.userLanguage || 'fr').substring(0,2);
+    const supported = ['fr','en','es'];
+
+    const initialLang = saved && supported.includes(saved)
+          ? saved
+          : (supported.includes(navLang) ? navLang : 'fr');
+
+    // Charge la langue au démarrage
+    window.i18n.load(initialLang).catch(()=>{});
+
+
+    const langToggle = document.getElementById('langToggle');
+    if (langToggle) {
+      const labels = { fr: 'Français', en: 'English', es: 'Español' };
+
+      // Mise à jour quand la langue change
+      window.i18n.onChange((lang) => {
+        langToggle.textContent = labels[lang] + ' ▾';
+      });
+    }
+
+    const toggle = document.getElementById('langToggle');
+    const list = document.getElementById('langList');
+
+    if (toggle && list) {
+
+      // Ouvrir / fermer le menu
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !list.hasAttribute('hidden');
+        if (isOpen) {
+          list.setAttribute('hidden', '');
+          toggle.setAttribute('aria-expanded', 'false');
+        } else {
+          list.removeAttribute('hidden');
+          toggle.setAttribute('aria-expanded', 'true');
+          list.focus();
+        }
+      });
+
+      // Fermer en cliquant ailleurs
+      document.addEventListener('click', () => {
+        if (!list.hasAttribute('hidden')) {
+          list.setAttribute('hidden', '');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Navigation clavier
+      list.addEventListener('keydown', (e) => {
+        const items = Array.from(list.querySelectorAll('li a'));
+        const index = items.indexOf(document.activeElement);
+
+        switch (e.key) {
+          case 'ArrowDown':
+            e.preventDefault();
+            items[(index + 1) % items.length].focus();
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            items[(index - 1 + items.length) % items.length].focus();
+            break;
+          case 'Escape':
+            list.setAttribute('hidden', '');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.focus();
+            break;
+        }
+      });
+
+      // Click sur une langue → i18n.setLang(lang)
+      list.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          let lang = a.getAttribute('href').replace('/', '').trim();
+          if (!supported.includes(lang)) return;
+          window.i18n.setLang(lang);
+          list.setAttribute('hidden', '');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
   });
 
   // expose a stable API for other scripts
