@@ -18,7 +18,7 @@
   "auteurs_link": "Colaboradores",
   "publication_link": "Publicación relacionada",
   "contact_link": "Contáctenos",
-  "manual_pdf": "assets/ManuelUtilisation_EN.pdf",
+  "manual_pdf": "assets/ManuelUtilisation_ES.pdf",
   "manual_pdf_text": "Descargar manual (EN)",
   "explication_pdf": "assets/ExplicationCalculs_EN.pdf",
   "explication_pdf_text": "Explicación de los cálculos",
@@ -92,3 +92,4 @@
   "error_missingData": "No se encontraron datos para guardar el preprocesamiento",
   "error_missingCol": "Columnas faltantes"
 }
+
