@@ -1021,4 +1021,3 @@ function affichageParametresSeuils() {
   document.getElementById('btnValidateFilesParam').disabled = false;
   document.getElementById("btnValidateFilesParam").classList.add("highlight-btn");
 }
-

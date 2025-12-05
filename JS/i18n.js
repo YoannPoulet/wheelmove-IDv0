@@ -223,4 +223,3 @@
   Object.defineProperty(window.i18n, 'currentLang', { get: () => currentLang });
 
 })();
-
