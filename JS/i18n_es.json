@@ -18,7 +18,7 @@
   "auteurs_link": "Colaboradores",
   "publication_link": "Publicación relacionada",
   "contact_link": "Contáctenos",
-  "manual_pdf": "assets/ManuelUtilisation_ES.pdf",
+  "manual_pdf": "assets/ManuelUtilisation_EN.pdf",
   "manual_pdf_text": "Descargar manual (EN)",
   "explication_pdf": "assets/ExplicationCalculs_EN.pdf",
   "explication_pdf_text": "Explicación de los cálculos",
@@ -40,7 +40,7 @@
   "intro_title": "Introducción",
   "pretrait_title": "Preprocesamiento de datos",
   "help_manual": "Manual de usuario",
-  "help_manual_href": "assets/ManuelUtilisation_EN.pdf",
+  "help_manual_href": "assets/ManuelUtilisation_ES.pdf",
   "help_explication": "Explicación de los cálculos",
   "help_explication_href": "assets/ExplicationCalculs_EN.pdf",
   "intro_text": "<p>Bienvenido a esta aplicación para analizar acciones locomotoras en sillas de ruedas manuales (MWC). Esta aplicación le permite:</p><ul><li>Determinar las velocidades lineales y angulares de la MWC a partir de datos de unidades de medición inercial.</li><li>Identificar automáticamente las tareas locomotoras personalizando los umbrales utilizados.</li><li>Visualizar los resultados en cronogramas claros y simplificados.</li><li>Exportar los resultados en formato CSV para un procesamiento posterior.</li></ul><p>Por motivos éticos de privacidad y gracias a la solución técnica empleada (JavaScript), todos los cálculos se realizan localmente.<br/>Como resultado, los datos introducidos en esta aplicación nunca se transfieren a un servidor ni se almacenan.</p><p>Antes de comenzar, es importante:</p><ul><li>Leer atentamente las instrucciones de carga de archivos (botón de Ayuda en la parte superior derecha).</li><li>Asegurarse de que los datos registrados estén completos, ya que los datos incompletos no son gestionados por esta aplicación.</li><li>Comprender cómo funciona el procesamiento y el significado de los cronogramas leyendo la sección de ayuda o la publicación asociada a este trabajo (al final de la página).</li></ul><p>Una vez revisada toda esta información, utilice los botones de abajo para navegar por la aplicación.</p>",
@@ -92,4 +92,3 @@
   "error_missingData": "No se encontraron datos para guardar el preprocesamiento",
   "error_missingCol": "Columnas faltantes"
 }
-

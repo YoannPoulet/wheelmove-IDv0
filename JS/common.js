@@ -789,7 +789,4 @@ function pchipInterpolate(x, y, xi) {
     attachHandlers();
   }
 
-
 })();
-
-
