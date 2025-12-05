@@ -16,9 +16,7 @@
       <a href="index.html" class="home-img">
         <img src="assets/home.jpeg" alt="Home" class="header-logo" onerror="this.style.display='🏠'">
       </a>
-      <a href="index.html" aria-label="Accueil">
-        <img src="assets/logo_CERAH.svg" alt="Logo" class="header-logo" onerror="this.style.display='none'">
-      </a>
+      <img src="assets/logo_CERAH.svg" alt="Logo" class="header-logo" onerror="this.style.display='none'">
     </div>
     <div class="header-center">
       <a href="index.html" class="header-title">
@@ -26,9 +24,22 @@
       </a>
     </div>
     <div class="header-right">
-      <a class="lang-flag" title="English">
+      <!-- <a class="lang-flag" title="English">
         <img src="assets/flag-en.png" alt="EN" onerror="this.style.display='none'">
-      </a>
+      </a> -->
+
+      <div class="lang-dropdown" role="region" aria-label="Language selector">
+        <button id="langToggle" aria-haspopup="listbox" aria-expanded="false">
+          Français ▾
+        </button>
+        <ul id="langList" role="listbox" tabindex="-1" aria-labelledby="langToggle" hidden>
+          <li role="option"><a href="/fr">Français</a></li>
+          <li role="option"><a href="/en">English</a></li>
+          <li role="option"><a href="/es">Español</a></li>
+        </ul>
+      </div>
+
+
       <button id="helpBtn" class="help-btn" type="button" aria-label="Aide" data-i18n="help_btn">Aide ?</button>
     </div>
   </header>
@@ -44,7 +55,8 @@
         <li>Visualiser les résultats sous forme de chronogrammes épurés.</li>
         <li>Exporter les résultats au format CSV pour un traitement ultérieur.</li>
       </ul>
-
+      <p>Par souci éthique de confidentialité et grâce à la solution technique employée (JavaScript), tous les calculs sont effectués localement.</br> 
+        Ainsi, les données saisies dans cette application ne sont jamais transférées vers un serveur ni enregistrées</p>
       <p>Avant de commencer, il est important de :</p>
       <ul>
         <li>Lire attentivement les instructions de chargement des fichiers (Bouton Aide en haut à droite).</li>
@@ -143,25 +155,21 @@
       <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
       <div data-i18n-html="mentions_legal">
         <h2>Mentions légales</h2>
-
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-          Nulla facilisi. Vivamus id urna eget ligula dictum fringilla at nec ipsum. 
-          Aenean vel nibh ac odio aliquet cursus. Donec id pretium arcu. 
-          Suspendisse congue dictum dolor, vitae eleifend lorem suscipit a.
+          Cette application est mise gratuitement à disposition dans le cadre de travaux de recherche scientifique et d’entraînement sportif.
+          Elle est fournie « en l’état » et ne constitue en aucun cas un outil professionnel, certifié ou destiné à un usage réglementé.
+          Les auteurs, développeurs et institutions partenaires déclinent toute responsabilité quant à tout usage inapproprié ou détourné de l’application,
+          ainsi que pour tout dommage direct ou indirect susceptible de résulter de son utilisation, y compris en cas de décision prise sur la base des informations ou résultats qu’elle fournit.
         </p>
-
         <p>
-          Curabitur convallis tempus lacus at varius. Morbi nec iaculis tellus. 
-          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-          Sed sodales est vel sem fermentum, ac aliquam velit porttitor. 
-          Integer vehicula libero nec urna sagittis, eget vulputate turpis tempor.
+          Les données saisies par l’utilisateur ne font l’objet d’aucune collecte, conservation, transmission ou exploitation par les auteurs ou par des tiers.
+          L’intégralité des traitements nécessaires au fonctionnement de l’application est exécutée localement sur le terminal de l’utilisateur.
+          Ce dernier demeure seul responsable des informations qu’il renseigne, de la configuration de son matériel et des conditions d’utilisation du service.
+          Les contenus, résultats ou interprétations générés par l’application ne sauraient être considérés comme reflétant de manière officielle la position des institutions partenaires.
         </p>
-
         <p>
-          Vivamus non interdum leo. Donec laoreet ullamcorper magna, 
-          eu condimentum libero placerat vitae. Vestibulum consequat nec sapien id fermentum. 
-          In hac habitasse platea dictumst.
+          Les auteurs se réservent le droit, à leur seule discrétion, de mettre à jour, modifier, suspendre ou supprimer l’accès à l’application, en tout ou partie, à tout moment et sans préavis.
+          Ils ne garantissent ni la disponibilité continue du service, ni l’absence d’erreurs, d’interruptions ou d’éventuels dysfonctionnements.
         </p>
       </div>
     </div>
