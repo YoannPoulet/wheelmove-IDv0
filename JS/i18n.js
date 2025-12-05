@@ -23,7 +23,6 @@
       document.documentElement.lang = normalized;
       localStorage.setItem('siteLang', normalized);
       currentLang = normalized;
-      updateLangFlagImages();
       notifyChange();
       return dict;
     } catch (e) {
@@ -224,3 +223,4 @@
   Object.defineProperty(window.i18n, 'currentLang', { get: () => currentLang });
 
 })();
+
