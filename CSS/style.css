@@ -637,7 +637,6 @@ summary .summary-buttons button:not([disabled]) { cursor: pointer !important; }
 .app-header .header-center {
   flex: 1 1 auto;
   text-align: center;
-  text-decoration: none;
 }
 .header-title{
   text-decoration: none;
@@ -709,4 +708,81 @@ summary .summary-buttons button:not([disabled]) { cursor: pointer !important; }
 }
 .help-menu .help-menu-item:hover {
   background: #f5f5f5;
+}
+
+/* dropdown sélection langue */
+.lang-dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+}
+
+/* Bouton */
+#langToggle {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 6px 6px 6px 12px;
+  margin-right: 10px;
+  min-width: 100px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+#langToggle:hover,
+#langToggle:focus {
+  background: #f3f3f3;
+  border-color: #999;
+  outline: none;
+}
+
+/* Dropdown list */
+#langList {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 20;
+}
+
+/* Options */
+#langList li {
+  padding: 0;
+  margin: 0;
+}
+
+#langList li a {
+  display: block;
+  padding: 6px 14px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+#langList li a:hover,
+#langList li a:focus {
+  background: #f0f0f0;
+  color: #000;
+  outline: none;
+}
+
+/* Accessibilité : focus visible */
+#langList li a:focus {
+  outline: 2px solid #0078ff55;
+  outline-offset: -2px;
+}
+
+/* Masquage accessible */
+#langList[hidden] {
+  display: none !important;
 }
