@@ -723,7 +723,7 @@ function pchipInterpolate(x, y, xi) {
 
   function openMenuUnderButton(btn) {
     const m = buildMenu();
-    // applyTranslations(m);
+    window.i18n.applyToDOM(m);
     // toggle if already open under same button
     const isHidden = m.classList.contains('hidden');
     // close any existing then possibly open
@@ -791,4 +791,5 @@ function pchipInterpolate(x, y, xi) {
 
 
 })();
+
 
