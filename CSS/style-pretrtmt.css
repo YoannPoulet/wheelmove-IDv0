@@ -59,6 +59,31 @@
     margin-top: 0;
 }
 
+/* Colonnes paramètres FRM pour ajout schéma à droite */
+.step2-columns {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+.step2-column-left {
+  max-width: 650px; 
+  /* flex: 1; */
+}
+.step2-column-left label:not(#FRMRayonRoueDiff):not(#FRMCamber) {
+  margin-top: 35px;
+}
+.step2-column-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.step2-column-right img {
+  width: 220px;
+  height: auto;
+}
+
 /* Boutons bas de page */
 .buttons-row-container {
   display: grid;
