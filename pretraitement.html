@@ -56,7 +56,7 @@
           <span class="summary-text" data-i18n-html="pretrait_stp1"><strong>Paramètres de pré-traitement</strong></span>
           <div class="summary-buttons">
             <span id="tickStep1" class="tick hidden">✔</span>
-            <button id="validateStep1" data-i18n="valider">Valider</button>
+            <button id="validateStep1" class="highlight-btn" data-i18n="valider">Valider</button>
             <button id="modifyStep1" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
@@ -107,9 +107,13 @@
             <button id="modifyStep2" class="modify-btn" data-i18n="modifier" disabled>Modifier</button>
           </div>
         </summary>
-          <label data-i18n="FRM_camber">Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
+        <div class="step2-columns">
+          <!-- Colonne de gauche -->
+          <div class="step2-column-left">
+          <label id="FRMCamber" data-i18n="FRM_camber">A : Carossage (°) : <input type="number" id="FRMcarrossage" step="1" min="0" value="0"></label>
           <div>
             <label for="FRMRayonRoue">
+              <span data-i18n="B"> B : </span>
               <span class="toggle" id="toggleRayonCirc">
                 <span id="onOpt" class="active" data-i18n="FRM_rad">Rayon</span>
                 <span id="offOpt" data-i18n="FRM_circ">Circonférence</span>
@@ -118,15 +122,20 @@
               <input type="number" id="FRMRayonRoues" step="0.1" min="1">
               <button class="modify-btn" type="button" id="toggleRayonsDiff" data-i18n="FRM_gauchedroite">⚙️ Différencier gauche/droite</button>
             </label>
-
             <div id="FRMRayonsSepares" style="display: none">
-              <label>
+              <label id="FRMRayonRoueDiff">
                 <span data-i18n="FRM_G">Gauche :</span> <input type="number" id="FRMRayonRoueG" step="0.1" min="1">
                 <span data-i18n="FRM_D">Droite :</span> <input type="number" id="FRMRayonRoueD" step="0.1" min="1">
               </label>
             </div>
           </div>
-          <label data-i18n="FRM_distcenterW">Distance entre les points de contact sol/roues arrière (cm) : <input type="number" id="FRMdistCentresRoues" step="1" min="1"></label>
+          <label data-i18n="FRM_distcenterW">C : Voie arrière (cm) : <input type="number" id="FRMdistCentresRoues" step="1" min="1"></label>
+          </div>
+          <!-- Colonne de droite -->
+          <div class="step2-column-right">
+            <img src="assets/FRM_schema.png" alt="Schéma des paramètres du FRM" class="frm-schema" onerror="this.style.display='none'">
+          </div>
+        </div>
       </details>
     </div>
 
@@ -274,72 +283,22 @@
   <!-- Footer -->
   <footer class="site-footer" role="contentinfo" aria-label="Pied de page">
     <nav aria-label="Liens pied de page">
-      <a href="#modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</a>
+      <button class="modal-trigger" data-target="modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</button>
       <span aria-hidden="true">|</span>
-      <a href="#modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</a>
+      <button class="modal-trigger" data-target="modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</button>
       <span aria-hidden="true">|</span>
-      <a href="https://www.mdpi.com/2409-9279/7/5/84" target="_blank" rel="noopener noreferrer" title="Publication associée" data-i18n="publication_link">Publication associée</a>
+      <button class="modal-trigger" data-target="modal-publis" title="Publications associées" data-i18n="publication_link">Publications associées</button>
       <span aria-hidden="true">|</span>
+      <!-- <a href="#modal-citation" title="Nous citer" data-i18n="citation_link">Nous citer</a>
+      <span aria-hidden="true">|</span> -->
       <a href="https://mobile.cerahtec.fr/fr/contact/cerah_site_invalides_recherches" target="_blank" rel="noopener noreferrer" title="Nous contacter" data-i18n="contact_link">Nous contacter</a>
     </nav>
   </footer>
 
-  <!-- Boite modale Contributeurs -->
-  <div id="modal-contributeurs" class="modal">
-    <div class="modal-content">
-      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
-
-      <h2 data-i18n="auteurs_link">Contributeurs</h2>
-
-      <div class="contributors-list compact">
-
-        <!-- Contributeur 1 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Christophe Sauret</div>
-            <div class="contributor-affiliation">
-              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
-            </div>
-            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-        <!-- Contributeur 2 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Yoann Poulet</div>
-            <div class="contributor-affiliation">
-              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
-            </div>
-            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-        <!-- Contributeur 3 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Mathieu Deves</div>
-            <div class="contributor-affiliation">
-              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
-            </div>
-            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
   <!-- Boite modale Mentions légales -->
   <div id="modal-mentions" class="modal">
     <div class="modal-content">
-      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
       <div data-i18n-html="mentions_legal">
         <h2>Mentions légales</h2>
         <p>
@@ -354,7 +313,6 @@
           Ce dernier demeure seul responsable des informations qu’il renseigne, de la configuration de son matériel et des conditions d’utilisation du service.
           Les contenus, résultats ou interprétations générés par l’application ne sauraient être considérés comme reflétant de manière officielle la position des institutions partenaires.
         </p>
-
         <p>
           Les auteurs se réservent le droit, à leur seule discrétion, de mettre à jour, modifier, suspendre ou supprimer l’accès à l’application, en tout ou partie, à tout moment et sans préavis.
           Ils ne garantissent ni la disponibilité continue du service, ni l’absence d’erreurs, d’interruptions ou d’éventuels dysfonctionnements.
@@ -362,6 +320,105 @@
       </div>
     </div>
   </div>
+
+  <!-- Boite modale Contributeurs -->
+  <div id="modal-contributeurs" class="modal">
+    <div class="modal-content">
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="auteurs_link">Contributeurs</h2>
+      <div class="contributors-list compact">
+        <!-- Contributeur 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Christophe Sauret</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+        <!-- Contributeur 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Yoann Poulet</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+        <!-- Contributeur 3 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Mathieu Deves</div>
+            <div class="contributor-affiliation">
+              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
+            </div>
+            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale Publications -->
+  <div id="modal-publis" class="modal">
+    <div class="modal-content">
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="publication_link">Publications associées</h2>
+      <div class="contributors-list compact">
+        <!-- Publication 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name" data-i18n="pretraitement_button">Prétraitement</div>
+            <div class="contributor-affiliation">
+              Poulet, Y.; Brassart, F.; Simonetti, E.; Pillet, H.; Faupin, A.; Sauret, C. Analyzing Intra-Cycle Velocity Profile and Trunk Inclination during Wheelchair Racing Propulsion. Sensors 2023, 23, 58.
+            </div>
+            <a href=" https://doi.org/10.3390/s23010058" target="_blank" class="contributor-link">
+              https://doi.org/10.3390/s23010058 
+            </a>
+          </div>
+        </div>
+        <!-- Publication 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name" data-i18n="identification_button">Identifiaction des tâches</div>
+            <div class="contributor-affiliation">
+              Deves, M.; Sauret, C.; Alberca, I.; Honnorat, L.; Poulet, Y.; Hays, A.; Faupin, A. Activity Identification, Classification, and Representation of Wheelchair Sport Court Tasks: A Method Proposal. Methods Protoc. 2024, 7, 84.
+            </div>
+            <a href="https://doi.org/10.3390/mps7050084" target="_blank" class="contributor-link">
+              https://doi.org/10.3390/mps7050084 
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale citation -->
+  <!-- <div id="modal-citation" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="citation_link">Nous citer</h2>
+      <div class="contributors-list compact">
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">A faire</div>
+            <div class="contributor-affiliation">
+              Publier dans Journal of OpenSource Software pour obtenir un DOI à mettre ici (ex : https://joss.theoj.org/papers/10.21105/joss.00927)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js" defer></script>
   <script src="JS/i18n.js" defer></script>

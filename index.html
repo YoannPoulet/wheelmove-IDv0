@@ -21,6 +21,7 @@
     <div class="header-center">
       <a href="index.html" class="header-title">
         <h1 class="header-title" data-i18n="intro_title">WheelMove-ID</h1>
+        <h1 class="header-subtitle" data-i18n="intro_title2">Outils d'identification des actions locomotrices en FRM</h1>
       </a>
     </div>
     <div class="header-right">
@@ -37,6 +38,7 @@
       <button id="helpBtn" class="help-btn" type="button" aria-label="Aide" data-i18n="help_btn">Aide ?</button>
     </div>
   </header>
+  
 
   <!-- Début du contenu -->
   <div class="container">
@@ -62,9 +64,9 @@
     </div>
     <!-- Boutons bas de page -->
     <div class="button-row">
-      <a href="assets/SampleData.zip" class="btn-read" data-i18n="download_sample" data-i18n-href="sample_zip" download>
+      <a href="assets/SampleData.zip" class="btn-read" data-i18n-html="download_sample" data-i18n-href="sample_zip" download>
         <img src="assets/sample.png" onerror="this.style.display='none'">
-        <span class="i18n-text">Données de démonstration</span>
+        <span class="i18n-text">Télécharger les </br> données de démonstration</span>
       </a>
       <a href="pretraitement.html" class="btn-read" data-i18n="pretraitement_button">
         <img src="assets/pretraitement.png" onerror="this.style.display='none'">
@@ -81,76 +83,26 @@
   <!-- Footer -->
   <footer class="site-footer" role="contentinfo" aria-label="Pied de page">
     <nav aria-label="Liens pied de page">
-      <a href="#modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</a>
+      <button class="modal-trigger" data-target="modal-mentions" title="Mentions légales" data-i18n="mentions_link">Mentions légales</button>
       <span aria-hidden="true">|</span>
-      <a href="#modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</a>
+      <button class="modal-trigger" data-target="modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</button>
       <span aria-hidden="true">|</span>
-      <a href="https://www.mdpi.com/2409-9279/7/5/84" target="_blank" rel="noopener noreferrer" title="Publication associée" data-i18n="publication_link">Publication associée</a>
+      <button class="modal-trigger" data-target="modal-publis" title="Publications associées" data-i18n="publication_link">Publications associées</button>
       <span aria-hidden="true">|</span>
+      <!-- <a href="#modal-citation" title="Nous citer" data-i18n="citation_link">Nous citer</a>
+      <span aria-hidden="true">|</span> -->
       <a href="https://mobile.cerahtec.fr/fr/contact/cerah_site_invalides_recherches" target="_blank" rel="noopener noreferrer" title="Nous contacter" data-i18n="contact_link">Nous contacter</a>
     </nav>
   </footer>
 
-  <!-- Boite modale Contributeurs -->
-  <div id="modal-contributeurs" class="modal">
-    <div class="modal-content">
-      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
-
-      <h2 data-i18n="auteurs_link">Contributeurs</h2>
-
-      <div class="contributors-list compact">
-
-        <!-- Contributeur 1 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Christophe Sauret</div>
-            <div class="contributor-affiliation">
-              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
-            </div>
-            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-        <!-- Contributeur 2 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Yoann Poulet</div>
-            <div class="contributor-affiliation">
-              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
-            </div>
-            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-        <!-- Contributeur 3 -->
-        <div class="contributor-item compact">
-          <div class="contributor-info">
-            <div class="contributor-name">Mathieu Deves</div>
-            <div class="contributor-affiliation">
-              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
-            </div>
-            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
-              ResearchGate
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
   <!-- Boite modale Mentions légales -->
   <div id="modal-mentions" class="modal">
     <div class="modal-content">
-      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
       <div data-i18n-html="mentions_legal">
         <h2>Mentions légales</h2>
         <p>
-          Cette application est mise gratuitement à disposition dans le cadre de travaux de recherche scientifique et d’entraînement sportif.
+          Cette application est mise gratuitement à disposition par le CERAH dans le cadre de travaux de recherche scientifique et d’entraînement sportif.
           Elle est fournie « en l’état » et ne constitue en aucun cas un outil professionnel, certifié ou destiné à un usage réglementé.
           Les auteurs, développeurs et institutions partenaires déclinent toute responsabilité quant à tout usage inapproprié ou détourné de l’application,
           ainsi que pour tout dommage direct ou indirect susceptible de résulter de son utilisation, y compris en cas de décision prise sur la base des informations ou résultats qu’elle fournit.
@@ -169,11 +121,108 @@
     </div>
   </div>
 
+  <!-- Boite modale Contributeurs -->
+  <div id="modal-contributeurs" class="modal">
+    <div class="modal-content">
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="auteurs_link">Contributeurs</h2>
+      <div class="contributors-list compact">
+        <!-- Contributeur 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Christophe Sauret</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Christophe-Sauret" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+        <!-- Contributeur 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Yoann Poulet</div>
+            <div class="contributor-affiliation">
+              Centre de Recherches et d'Etudes sur l'Appareillage des Handicapés (CERAH) – Institution nationale des Invalides
+            </div>
+            <a href="https://www.researchgate.net/profile/Yoann-Poulet" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+        <!-- Contributeur 3 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">Mathieu Deves</div>
+            <div class="contributor-affiliation">
+              Laboratoire Jeunesse Activité Physique et Sportive—Santé (J-AP2S) – Université de Toulon
+            </div>
+            <a href="https://www.researchgate.net/profile/Mathieu-Deves" target="_blank" class="contributor-link">
+              ResearchGate
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale Publications -->
+  <div id="modal-publis" class="modal">
+    <div class="modal-content">
+      <a href="javascript:void(0)" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="publication_link">Publications associées</h2>
+      <div class="contributors-list compact">
+        <!-- Publication 1 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name" data-i18n="pretraitement_button">Prétraitement</div>
+            <div class="contributor-affiliation">
+              Poulet, Y.; Brassart, F.; Simonetti, E.; Pillet, H.; Faupin, A.; Sauret, C. Analyzing Intra-Cycle Velocity Profile and Trunk Inclination during Wheelchair Racing Propulsion. Sensors 2023, 23, 58.
+            </div>
+            <a href=" https://doi.org/10.3390/s23010058" target="_blank" class="contributor-link">
+              https://doi.org/10.3390/s23010058 
+            </a>
+          </div>
+        </div>
+        <!-- Publication 2 -->
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name" data-i18n="identification_button">Identifiaction des tâches</div>
+            <div class="contributor-affiliation">
+              Deves, M.; Sauret, C.; Alberca, I.; Honnorat, L.; Poulet, Y.; Hays, A.; Faupin, A. Activity Identification, Classification, and Representation of Wheelchair Sport Court Tasks: A Method Proposal. Methods Protoc. 2024, 7, 84.
+            </div>
+            <a href="https://doi.org/10.3390/mps7050084" target="_blank" class="contributor-link">
+              https://doi.org/10.3390/mps7050084 
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boite modale citation -->
+  <!-- <div id="modal-citation" class="modal">
+    <div class="modal-content">
+      <a href="#!" class="modal-close" aria-label="Fermer la fenêtre">&times;</a>
+      <h2 data-i18n="citation_link">Nous citer</h2>
+      <div class="contributors-list compact">
+        <div class="contributor-item compact">
+          <div class="contributor-info">
+            <div class="contributor-name">A faire</div>
+            <div class="contributor-affiliation">
+              Publier dans Journal of OpenSource Software pour obtenir un DOI à mettre ici (ex : https://joss.theoj.org/papers/10.21105/joss.00927)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js" defer></script>
   <script src="JS/i18n.js" defer></script>
   <script src="JS/common.js" defer></script>
 
   </body>
   </html>
-
 
