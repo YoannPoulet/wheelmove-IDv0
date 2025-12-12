@@ -960,53 +960,10 @@ function exportJson(isLegend = false) {
   link.click();
 }
 
-//---------------- Légende chronogrammes -----------------------
-//pour que la légende et les chronogrmame aient toujours les mêmes couleurs
-// function renderLegend() {
-//   const container = document.querySelector(".legend-grid");
-//   if (!container) return;
-
-//   container.innerHTML = ""; // vider
-
-//   // Ordre voulu
-//   const col1 = [1, 2, 3];
-//   const col2 = [4, 5, 6];
-
-//   // Créer deux colonnes
-//   const col1Div = document.createElement("div");
-//   const col2Div = document.createElement("div");
-
-//   col1.forEach(id => {
-//     const { label, color } = TASKS[id];
-//     const item = document.createElement("div");
-//     item.className = "legend-item";
-//     item.innerHTML = `
-//       <span class="color-box" style="background-color:${color}">${id}</span>
-//       ${label}
-//     `;
-//     col1Div.appendChild(item);
-//   });
-
-//   col2.forEach(id => {
-//     const { label, color } = TASKS[id];
-//     const item = document.createElement("div");
-//     item.className = "legend-item";
-//     item.innerHTML = `
-//       <span class="color-box" style="background-color:${color}">${id}</span>
-//       ${label}
-//     `;
-//     col2Div.appendChild(item);
-//   });
-
-//   container.appendChild(col1Div);
-//   container.appendChild(col2Div);
-// }
-
 // -------------Afficher les paramètres après clic sur bouton chargement ------------
 function affichageParametresSeuils() {
   const d = document.getElementById("detailsParam");
   d.classList.remove('locked');
-  d.removeAttribute('data-locked');
   d.open = true;
 
   // Activer les boutons de gestion des paramètres

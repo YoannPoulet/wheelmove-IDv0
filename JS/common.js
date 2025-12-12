@@ -790,3 +790,31 @@ function pchipInterpolate(x, y, xi) {
   }
 
 })();
+
+// Gestion des boites modales du footer
+document.addEventListener("DOMContentLoaded", () => {
+  const triggers = document.querySelectorAll(".modal-trigger");
+  const modals = document.querySelectorAll(".modal");
+
+  triggers.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      const modal = document.getElementById(targetId);
+      if (modal) modal.classList.add("open");
+    });
+  });
+
+  modals.forEach(modal => {
+    // fermer avec le X
+    modal.querySelector(".modal-close")?.addEventListener("click", () => {
+      modal.classList.remove("open");
+    });
+
+    // fermer en cliquant en dehors de la boîte
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.classList.remove("open");
+    });
+  });
+});
+
+

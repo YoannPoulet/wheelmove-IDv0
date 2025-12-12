@@ -314,12 +314,12 @@ setTimeout(updateToggleRayonsText, 0);
 
 //------------ Boutons validation étape 2 -----------------------
 document.getElementById("validateStep2").addEventListener("click", () => {
-  const carrossage = document.getElementById('FRMcarrossage').value;
+  const carrossage = Math.abs(Number(document.getElementById('FRMcarrossage').value));
   const rayons = document.getElementById('FRMRayonRoues').value;
   const rayonG = document.getElementById('FRMRayonRoueG').value;
   const rayonD = document.getElementById('FRMRayonRoueD').value;
   const dist = document.getElementById("FRMdistCentresRoues").value;
-  if (carrossage && (rayons || (rayonG && rayonD)) && dist) unlockStep("step2", "step3", "tickStep2");
+  if (!Number.isNaN(carrossage) && (rayons || (rayonG && rayonD)) && dist) unlockStep("step2", "step3", "tickStep2");
 });
 
 // Mettre à jour l'état (disabled) de tous les boutons de validation (1 à 5)
@@ -329,7 +329,7 @@ function updateAllValidateButtons() {
   const windowMA = document.getElementById('maWindow');
   const sgEl = document.getElementById('sgWindow');
   const sgPolyEl = document.getElementById('sgPoly');
-  const carrossage = document.getElementById('FRMcarrossage');
+  const carrossage = Math.abs(Number(document.getElementById('FRMcarrossage').value));
   const rayons = document.getElementById('FRMRayonRoues');
   const rayonG = document.getElementById('FRMRayonRoueG');
   const rayonD = document.getElementById('FRMRayonRoueD');
@@ -344,7 +344,7 @@ function updateAllValidateButtons() {
 
   // enregistrement dans le state avec passage en metres pour les rayons et distances
   state.param.freqAcq = freq.value;
-  state.param.carrossage = carrossage.value;
+  state.param.carrossage = carrossage;
   if (rayons.value) {
     state.param.rayonRoueGauche = rayons.value*0.01; // cm -> m
     state.param.rayonRoueDroite = rayons.value*0.01; // cm -> m
@@ -366,7 +366,7 @@ function updateAllValidateButtons() {
     (filterChoice=='none' || 
     (filterChoice=='ma' && windowMA.value) ||
     (filterChoice=='SG' && sgEl.value && sgPolyEl.value));
-  const canValidate2 = !!((carrossage && carrossage.value)
+  const canValidate2 = !!((!Number.isNaN(carrossage))
     && ((rayons && rayons.value) || (rayonG && rayonG.value && rayonD && rayonD.value)) 
     && dist && dist.value);
 
@@ -396,19 +396,19 @@ function updateAllValidateButtons() {
   }
   if (btn2) {
     if (step2El && step2El.dataset && step2El.dataset.validated === 'true') btn2.disabled = true;
-    else btn2.disabled = !canValidate2;
+    else btn2.disabled = !canValidate2; 
   }
   if (btn3) {
     if (step3El && step3El.dataset && step3El.dataset.validated === 'true') btn3.disabled = true;
-    else btn3.disabled = !hasStat;
+    else btn3.disabled = !hasStat; 
   }
   if (btn4) {
     if (step4El && step4El.dataset && step4El.dataset.validated === 'true') btn4.disabled = true;
-    else btn4.disabled = !hasLigne;
+    else btn4.disabled = !hasLigne; 
   }
   if (btn5) {
     if (step5El && step5El.dataset && step5El.dataset.validated === 'true') btn5.disabled = true;
-    else btn5.disabled = !hasAcq;
+    else btn5.disabled = !hasAcq; 
   }
 
   // Update Modifier buttons: enable only when step is validated
@@ -596,8 +596,10 @@ function unlockStep(currentStep, nextStepId, tickId) {
   // Open next step (and ensure it's unlocked) only when not coming from a Modify/edit session
   if (nextStep && !isEditing) {
     nextStep.classList.remove("locked");
-    nextStep.removeAttribute('data-locked');
     nextStep.open = true;
+    const idNumNext = nextStepId.replace('step','');
+    const validateBtnNext = document.getElementById('validateStep' + idNumNext);
+    if (validateBtnNext) validateBtnNext.classList.add('highlight-btn');
   }
 
   // Close and lock the current step to prevent re-opening
@@ -611,7 +613,10 @@ function unlockStep(currentStep, nextStepId, tickId) {
     if (currentStep) {
       const idNum2 = currentStep.replace('step','');
       const validateBtn = document.getElementById('validateStep' + idNum2);
-      if (validateBtn) validateBtn.disabled = true;
+      if (validateBtn) {
+        validateBtn.disabled = true;
+        validateBtn.classList.remove('highlight-btn');
+      }
     }
     // If we were in an edit session, clear that flag now that the step is validated/locked
     if (isEditing) {
@@ -625,6 +630,7 @@ function unlockStep(currentStep, nextStepId, tickId) {
           step3.dataset.validated === 'true' && step4.dataset.validated === 'true' &&
           step5.dataset.validated === 'true') {
         document.getElementById("saveDataIMUBtn").disabled = false;
+        document.getElementById("saveDataIMUBtn").classList.add('highlight-btn');
       }
     }
   }
@@ -701,14 +707,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!d) return;
       // déverrouiller temporairement et rouvrir
       d.classList.remove('locked');
-      d.removeAttribute('data-locked');
       d.dataset.validated = 'false';
       // mark this detail as being edited via the Modify button so validation later
       // won't automatically advance to the next step
       d.dataset.editing = 'true';
       // re-enable the validate button so the user can validate again after editing
       const revalBtn = document.getElementById('validateStep' + n);
-      if (revalBtn) revalBtn.disabled = false;
+      if (revalBtn) {
+          revalBtn.disabled = false;
+          revalBtn.classList.add('highlight-btn');
+      }
+        
       d.open = true;
       // réactiver les boutons du tableau correspondant
       if (typeof setFileTableButtonsState === 'function') {
