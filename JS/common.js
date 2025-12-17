@@ -929,11 +929,12 @@ if (introContainer) {
   introContainer.addEventListener('click', (e) => {
     if (e.target.id === 'manualTrigger') {
       // Ouvre la modale des publications
-      const btn = document.getElementById('publicationsModalBtn');
+      const btn = document.getElementById('modalPublis');
       if (btn) btn.click();
     }
   });
 }
+
 
 
 
