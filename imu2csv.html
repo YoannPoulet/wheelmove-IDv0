@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> WheelMove-ID : Introduction</title>
+  <title> WheelMove-ID : IMU raw data to CSV</title>
   <link rel="stylesheet" href="CSS/style.css">
-  <link rel="stylesheet" href="CSS/style-intro.css">
+  <link rel="stylesheet" href="CSS/style-imu2csv.css">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
 </head>
-
 <body>
   <!-- En tête -->
   <header class="app-header">
@@ -19,9 +18,8 @@
       <img src="assets/logo_CERAH.svg" alt="Logo" class="header-logo" onerror="this.style.display='none'">
     </div>
     <div class="header-center">
-      <a href="index.html" class="header-title">
-        <h1 class="header-title" data-i18n="intro_title">WheelMove-ID</h1>
-        <h1 class="header-subtitle" data-i18n="intro_title2">Outils d'identification des actions locomotrices en FRM</h1>
+      <a href="imu2csv.html" class="header-title">
+        <h1 class="header-title" data-i18n="imu2csv_title">Organisation des données</h1>
       </a>
     </div>
     <div class="header-right">
@@ -38,50 +36,192 @@
       <button id="helpBtn" class="help-btn" type="button" aria-label="Aide" data-i18n="help_btn">Aide ?</button>
     </div>
   </header>
-  
 
-  <!-- Début du contenu -->
-  <div class="container">
-    <div data-i18n-html="intro_text1">
-      <p>Bienvenue sur cette application d’analyse des actions locomotrices en Fauteuil Roulant Manuel (FRM). Cette application vous permettra de :</p>
-      
-      <ul>
-        <li>Déterminer les vitesses linéaire et angulaire du FRM à partir des données de centrales inertielles.</li>
-        <li>Identifier automatiquement les tâches locomotrices en personnalisant les seuils utilisés.</li>
-        <li>Visualiser les résultats sous forme de chronogrammes épurés.</li>
-        <li>Exporter les résultats au format CSV pour un traitement ultérieur.</li>
-      </ul>
-      <p>Par souci éthique de <strong>confidentialité</strong> et grâce à la solution technique employée (JavaScript), tous les calculs sont effectués uniquement sur <strong>votre ordinateur</strong>.</br> 
-        Ainsi, les données saisies dans cette application ne sont jamais transférées vers un serveur ni enregistrées</p>
-      <p>Avant de commencer, il est important de :</p>
+  <!-- Message si pas de javascript -->
+  <noscript> 
+    <div class="msg-noscript">
+      ⚠️ <strong>JavaScript désactivé !</strong><br>
+      Cette page nécessite JavaScript pour fonctionner correctement.<br>
+      Les fichiers CSV ne pourront pas être chargés, les tâches locomotrices ne seront pas calculées, et les chronogrammes ne seront pas affichés.<br>
+      Veuillez activer JavaScript dans votre navigateur pour utiliser toutes les fonctionnalités.
     </div> 
-    <div data-i18n-html="intro_text2">
-      <ul>
-        <li>Lire attentivement le <a href="{{i18n.help_manual_href}}" target="_blank" rel="noopener" class="clickable">manuel d'utilisation</a></li>
-        <li>S'assurer que les données enregistrées soient <strong>complètent</strong>, les données incomplètent n'étant pas gérées par cette application.</li>
-        <li>Comprendre le fonctionnement du traitement et la signification des chronogrammes en lisant <a href="{{i18n.help_explication_href}}" target="_blank" rel="noopener" class="clickable">l'aide</a> ou les <span id="manualTrigger" class="clickable">publications associées à ces travaux</span>.</li>
-      </ul>
+  </noscript> 
 
-      <p>Une fois que vous aurez pris connaissance de toutes ces informations, utilisez les boutons ci-dessous pour naviguer dans l'application.</p>
+  <!-- Début contenu -->
+  <div class="container">
+    <!-- Chargement des fichiers IMU -->
+    <div class="seuils-container">
+      <details open>
+        <summary class="custom-summary">
+          <span class="summary-text" data-i18n-html="imu2csv_loadtitle"><strong>Fichiers bruts IMU</strong></span>
+        </summary>
+        <div class="load-container">
+          <button id="loadimu2csv" data-i18n="imu2csv_loadmsg">Charger les fichiers bruts IMU</button>
+          <div id="dropZoneimu2csv" class="drop-zone">
+            <span data-i18n="multiple_drop">ou déposez le(s) fichier(s) ici</span>
+          </div>
+        </div>
+      </details>
+      <!-- Tableau spécifique Statique -->
+      <div id="fileTableContainerIMUraw" class="file-table-container hidden">
+        <table id="fileTableIMUraw"  class="dynamic-table">
+          <colgroup>
+            <col id="colFileNameIMUraw" class="colNom">
+            <col>
+            <col id="colActionIMUraw" class="colAction">
+          </colgroup>
+          <thead>
+            <tr>
+              <th data-i18n="table_name">Nom du fichier</th>
+              <th data-i18n="table_status">Statut</th>
+              <th style="white-space: nowrap;" data-i18n="table_action">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- lignes insérées dynamiquement -->
+          </tbody>
+        </table>
+      </div>
+    </div>  
+
+    <!-- Get mapping -->
+    <div class="seuils-container">
+      <details closed>
+        <summary class="custom-summary">
+          <span class="summary-text" data-i18n-html="imu2csv_imuChassis"><strong>Première acquisition</strong></span> 
+        </summary>
+
+        <!-- IMU Chassis -->
+        <div class="acq-selector">
+          <label for="acqSelect" data-i18n-html="strongchassis"><strong>Châssis :</strong></label>
+          <select id="acqSelect">
+            <!-- Options insérées dynamiquement -->
+          </select>
+        </div>
+        <div class="table-container">
+          <table class="fixed-table" id="tableCorrespChassis">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Acc X</th>
+                <th>Acc Y</th>
+                <th>Acc Z</th>
+                <th>Gyr X</th>
+                <th>Gyr Y</th>
+                <th>Gyr Z</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Roue Droite -->
+        <div class="acq-selector">
+          <label for="acqSelectRD" data-i18n-html="strongRD"><strong>Roue droite :</strong></label>
+          <select id="acqSelectRD">
+            <!-- Options insérées dynamiquement -->
+          </select>
+        </div>
+        <div class="table-container">
+          <table class="fixed-table" id="tableCorrespRD">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Acc X</th>
+                <th>Acc Y</th>
+                <th>Acc Z</th>
+                <th>Gyr X</th>
+                <th>Gyr Y</th>
+                <th>Gyr Z</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Roue Gauche -->
+        <div class="acq-selector">
+          <label for="acqSelectRG" data-i18n-html="strongRG"><strong>Roue gauche :</strong></label>
+          <select id="acqSelectRG">
+            <!-- Options insérées dynamiquement -->
+          </select>
+        </div>
+        <div class="table-container">
+          <table class="fixed-table" id="tableCorrespRG">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Acc X</th>
+                <th>Acc Y</th>
+                <th>Acc Z</th>
+                <th>Gyr X</th>
+                <th>Gyr Y</th>
+                <th>Gyr Z</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </details>
     </div>
-    <!-- Boutons bas de page -->
-    <div class="button-row">
-      <a href="assets/SampleData.zip" class="btn-read" data-i18n-href="sample_zip" download>
-        <img src="assets/sample.png" onerror="this.style.display='none'">
-        <span data-i18n-html="download_sample" class="i18n-text">Télécharger les </br> données de démonstration</span>
-      </a>
-      <a href="pretraitement.html" class="btn-read" data-i18n="pretraitement_button">
-        <img src="assets/pretraitement.png" onerror="this.style.display='none'">
-        <span class="i18n-text">Prétraitement des données</span>
-      </a>
-      <a href="locomotion.html" class="btn-read" data-i18n="identification_button">
-        <img src="assets/identification.png" onerror="this.style.display='none'">
-        <span class="i18n-text">Identification des tâches</span>
-      </a>
+    
+    <!-- Batch processing -->
+    <div class="seuils-container">
+      <details closed>
+        <summary class="custom-summary">
+          <span class="summary-text" data-i18n-html="imu2csv_batch"><strong>Traitement par lots</strong></span>
+        </summary>
+        <!-- Tableau pour batch processing -->
+        <div class="table-container">
+          <table class="fixed-table" id="tableBatch">
+            <thead>
+              <tr>
+                <th data-i18n="imu2csv_batch_name">Nom de l'acquisition</th>
+                <th data-i18n="imu2csv_batch_IMUchassis">Fichier IMU Châssis</th>
+                <th data-i18n="imu2csv_batch_IMURD">Fichier IMU Roue Droite</th>
+                <th data-i18n="imu2csv_batch_IMURG">Fichier IMU Roue Gauche</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input class="batch-input" type="text" value=""></td>
+                <td class="small-header"></td>
+                <td class="small-header"></td>
+                <td class="small-header"></td>
+              </tr>
+              <!-- lignes générées par JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="boutons-batch">
+          <button id="addBatchRowBtn" data-i18n="imu2csv_addrow">Ajouter une ligne</button>
+          <button id="removeBatchRowBtn" data-i18n="imu2csv_removerow">Supprimer la dernière ligne</button>
+        </div>
+
+      </details>
+    </div>  
+
+    <!-- Bouton de génération des CSV -->
+    <div class="generate-container">
+      <span></span>
+      <button id="generateCSVBtn" disabled data-i18n="imu2csv_generatebtn">Générer le(s) fichier(s) CSV</button>
+      <button id="NewCuration">
+        <span class="btn-text" data-i18n="newimu2csv">Nouvelle(s) acquisition(s)</span>
+        <span class="btn-arrow">↺</span> 
+      </button>
     </div>
-  
-  </div>
- 
+
+    <div id="statusMsgSaveCSV"></div>
+
+  </div> 
+
   <!-- Footer -->
   <footer class="site-footer" role="contentinfo" aria-label="Pied de page">
     <nav aria-label="Liens pied de page">
@@ -89,7 +229,7 @@
       <span aria-hidden="true">|</span>
       <button class="modal-trigger" data-target="modal-contributeurs" title="Contributeurs" data-i18n="auteurs_link">Contributeurs</button>
       <span aria-hidden="true">|</span>
-      <button class="modal-trigger" id="modalPublis" data-target="modal-publis" title="Publications associées" data-i18n="publication_link">Publications associées</button>
+      <button class="modal-trigger" data-target="modal-publis" title="Publications associées" data-i18n="publication_link">Publications associées</button>
       <span aria-hidden="true">|</span>
       <!-- <a href="#modal-citation" title="Nous citer" data-i18n="citation_link">Nous citer</a>
       <span aria-hidden="true">|</span> -->
@@ -104,7 +244,7 @@
       <div data-i18n-html="mentions_legal">
         <h2>Mentions légales</h2>
         <p>
-          Cette application est mise gratuitement à disposition par le CERAH dans le cadre de travaux de recherche scientifique et d’entraînement sportif.
+          Cette application est mise gratuitement à disposition dans le cadre de travaux de recherche scientifique et d’entraînement sportif.
           Elle est fournie « en l’état » et ne constitue en aucun cas un outil professionnel, certifié ou destiné à un usage réglementé.
           Les auteurs, développeurs et institutions partenaires déclinent toute responsabilité quant à tout usage inapproprié ou détourné de l’application,
           ainsi que pour tout dommage direct ou indirect susceptible de résulter de son utilisation, y compris en cas de décision prise sur la base des informations ou résultats qu’elle fournit.
@@ -221,10 +361,14 @@
     </div>
   </div> -->
 
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script> 
   <script src="JS/i18n.js" defer></script>
   <script src="JS/common.js" defer></script>
+  <script src="JS/imu2csv.js" defer></script>
 
-  </body>
-  </html>
+</body>
+</html>
+
 
