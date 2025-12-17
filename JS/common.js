@@ -924,6 +924,8 @@ function refreshSelect() {
   });
 }
 
-document.getElementById('manualTrigger')?.addEventListener('click', () => {
+document.getElementById('#manualTrigger')?.addEventListener('click', () => {
+  console.log(cliqueModalPubli);
   document.getElementById('modalPublis')?.click();
 });
+
