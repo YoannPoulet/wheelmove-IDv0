@@ -924,10 +924,16 @@ function refreshSelect() {
   });
 }
 
-document.getElementById('introContainer')?.addEventListener('click', (e) => {
+const introContainer = document.getElementById('introContainer');
+if (introContainer) {
+  introContainer.addEventListener('click', (e) => {
     if (e.target.id === 'manualTrigger') {
-        document.getElementById('publicationsModalBtn')?.click();
+      // Ouvre la modale des publications
+      const btn = document.getElementById('publicationsModalBtn');
+      if (btn) btn.click();
     }
-});
+  });
+}
+
 
 
