@@ -924,8 +924,10 @@ function refreshSelect() {
   });
 }
 
-document.getElementById('#manualTrigger')?.addEventListener('click', () => {
-  console.log(cliqueModalPubli);
-  document.getElementById('modalPublis')?.click();
+document.getElementById('introContainer')?.addEventListener('click', (e) => {
+    if (e.target.id === 'manualTrigger') {
+        document.getElementById('publicationsModalBtn')?.click();
+    }
 });
+
 
