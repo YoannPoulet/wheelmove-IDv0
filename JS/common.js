@@ -24,7 +24,7 @@ async function handleFiles(files, category = null) {
     let idForRow = category;
 
     // Vérifier extension
-    if (!visibleName.toLowerCase().endsWith('.csv')) {
+    if (category != "raw" && !visibleName.toLowerCase().endsWith('.csv')) {
       const key = 'row_wrongformat';
       const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Format non supporté (seuls les CSV sont acceptés)";
       addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt, key);
@@ -38,24 +38,28 @@ async function handleFiles(files, category = null) {
       addFileRow(visibleName, msg, true, idForRow, fileNameWithoutExt, key);
       continue;
     }
-
-    try {
-      const text = await file.text();
-    const acq = new Acquisition(fileNameWithoutExt);
-    acq.loadDataFromCSV(text);
-
-    // Marquer la catégorie/type (Statique | LigneDroite | Acquis)
-    acq.category = category;
-
-    // Ajouter l'acquisition
-    appState.acquisitions.push(acq);
-      const key = 'row_loaded';
-      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
-      addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
-    } catch (err) {
-      const msgerr = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(err.message) : err.message;
-      addFileRow(visibleName, msgerr, true, idForRow, fileNameWithoutExt, err.message);
-    }
+    
+    // Charger le fichier
+    const text = await file.text();
+    if (category == "raw") {
+      const acq = new rawDataFiles(fileNameWithoutExt);
+      acq.loadRAW(file);
+      acq.category = category;
+      // Ajouter l'acquisition
+      appState.acquisitions.push(acq);
+      }
+    else {
+      const acq = new Acquisition(fileNameWithoutExt);
+      acq.loadDataFromCSV(text);
+      acq.category = category;
+      // Ajouter l'acquisition
+      appState.acquisitions.push(acq);
+    }    
+    
+    // Ajouter une ligne au tableau
+    const key = 'row_loaded';
+    const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
+    addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
   }
 
   // Mettre à jour l'UI (table, bouton run)
@@ -95,6 +99,7 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
   if (idTable === 'Statique') tbody = document.querySelector('#fileTableStatique tbody');
   else if (idTable === 'LigneDroite') tbody = document.querySelector('#fileTableLigneDroite tbody');
   else if (idTable === 'Acquis') tbody = document.querySelector('#fileTableAcquis tbody');
+  else if (idTable === 'raw') tbody = document.querySelector('#fileTableIMUraw tbody');
   else tbody = document.querySelector('#fileTable tbody');
 
   if (!tbody) {
@@ -174,6 +179,14 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
       }
     }
 
+    // Met à jour les sélecteurs d'acquisitions
+    if (idTable === 'raw') {
+      refreshSelect();
+      refreshBatchSelects();
+      initiateTables();
+    }
+
+    // Met à jour l'état du tableau et du bouton Run
     updateFileTableState(true);
   });
 
@@ -190,11 +203,13 @@ function addFileRow(filename, status, isError = false, idTable = null, acqName =
 // callWithBtnValidate true => on tentera de mettre à jour l'état du bouton btnValidate s'il existe
 function updateFileTableState(callWithBtnValidate = false) {
   // containers et leurs tbodies
+  const tbodyRaw = document.querySelector('#fileTableIMUraw tbody');
   const tbodyMain = document.querySelector('#fileTable tbody');
   const tbodyStat = document.querySelector('#fileTableStatique tbody');
   const tbodyLigne = document.querySelector('#fileTableLigneDroite tbody');
   const tbodyAcquis = document.querySelector('#fileTableAcquis tbody');
 
+  const containerRaw = document.getElementById('fileTableContainerIMUraw');
   const containerMain = document.getElementById('fileTableContainer');
   const containerStat = document.getElementById('fileTableContainerStatique');
   const containerLigne = document.getElementById('fileTableContainerLigneDroite');
@@ -202,6 +217,7 @@ function updateFileTableState(callWithBtnValidate = false) {
 
   const btnValidate = callWithBtnValidate ? document.getElementById('btnValidate') : null;
 
+  if (containerRaw && tbodyRaw) containerRaw.classList.toggle('hidden', tbodyRaw.children.length === 0);
   if (containerStat && tbodyStat) containerStat.classList.toggle('hidden', tbodyStat.children.length === 0);
   if (containerLigne && tbodyLigne) containerLigne.classList.toggle('hidden', tbodyLigne.children.length === 0);
   if (containerAcquis && tbodyAcquis) containerAcquis.classList.toggle('hidden', tbodyAcquis.children.length === 0);
@@ -222,6 +238,7 @@ function setFileTableButtonsState(category, disabled) {
   else if (category === 'LigneDroite') tableSelector = '#fileTableLigneDroite';
   else if (category === 'Acquis') tableSelector = '#fileTableAcquis';
   else if (category === 'DetectionTache') tableSelector = '#fileTable';
+  else if (category === 'raw') tableSelector = '#fileTableIMUraw';
   if (!tableSelector) return;
 
   const tbody = document.querySelector(`${tableSelector} tbody`);
@@ -817,4 +834,96 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// ----------------------Gestion des menus déroulants ----------------------
+function populateSelect({
+  selectId,
+  items,
+  filter = null,
+  placeholderKey = null,
+  selectedItem = null
+}) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
 
+  select.innerHTML = '';
+
+  const opt = document.createElement('option');
+  opt.value = '';
+  opt.textContent = window.i18n?.t ? window.i18n.t('select_acquisition') : '— Choisir —';
+  opt.disabled = true;
+  opt.hidden = true;
+  opt.selected = !selectedItem; 
+  select.appendChild(opt);
+
+  if (!Array.isArray(items)) return;
+
+  items.forEach((item, index) => {
+    if (filter && !filter(item)) return;
+
+    const option = document.createElement('option');
+    option.value = index.toString();
+    option.textContent = item.fileName ?? `item ${index}`;
+
+    if (selectedItem && item.fileName === selectedItem) {
+      option.selected = true;
+    }
+
+    select.appendChild(option);
+  });
+}
+
+// Récupérer l'acquisition sélectionnée dans un select
+function getSelectedAcquisition(selectId) {
+  const select = document.getElementById(selectId);
+  if (!select || select.value === '') return null;
+
+  const idx = Number(select.value);
+  return state.acquisitions[idx] ?? null;
+}
+
+//Récupérer un acquisition à partir de son nom
+function getAcquisitionByName(name) {
+  if (!name) return null;
+  const appState = getAppState();
+  return appState.acquisitions.find(a => a.fileName === name) ?? null;
+}
+
+function refreshSelect() {
+  const appState = getAppState();
+  
+  // reset sélection si invalide
+  ['selectedChassis', 'selectedRD', 'selectedRG'].forEach(key => {
+    const selected = appState[key];
+    if (
+      selected &&
+      !appState.acquisitions.some(acq => acq.fileName === selected)
+    ) {
+      appState[key] = null;
+    }
+  });
+
+  populateSelect({
+    selectId: 'acqSelect',
+    items: appState.acquisitions,
+    filter: acq => acq.category === 'raw',
+    selectedItem: appState.selectedChassis
+  });
+
+  populateSelect({
+    selectId: 'acqSelectRD',
+    items: appState.acquisitions,
+    filter: acq => acq.category === 'raw',
+    selectedItem: appState.selectedRD
+  });
+
+  populateSelect({
+    selectId: 'acqSelectRG',
+    items: appState.acquisitions,
+    filter: acq => acq.category === 'raw',
+    selectedItem: appState.selectedRG
+  });
+}
+
+document.getElementById('manualTrigger')?.addEventListener('click', () => {
+  document.getElementById('modalPublis')?.click();
+});
