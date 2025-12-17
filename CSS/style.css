@@ -10,6 +10,13 @@
   box-sizing: border-box;
 }
 
+.clickable {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 /* Message JS désactivé */
 .msg-noscript {
   border: 2px solid #e74c3c;
@@ -204,6 +211,13 @@ details[open] > .custom-summary::before {
 .options-container label {
   display: block;
   margin: 0px 0px 5px 0px;
+}
+
+/* Position de la drop-zone */
+.load-container {
+    display: flex;           /* active le flexbox */
+    align-items: center;     /* centre verticalement le contenu */
+    gap: 10px;               /* espace entre le bouton et la drop-zone */
 }
 
 .drop-zone:hover,

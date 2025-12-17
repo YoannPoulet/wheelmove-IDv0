@@ -1,0 +1,190 @@
+.acq-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.acq-selector:not(:first-of-type) {
+  padding-top: 12px;
+  margin-top: 24px;
+  border-top: 1px solid #e6e6e6;
+}
+
+.acq-selector label {
+  display: inline-block;
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+
+/* =========================
+   Conteneur scrollable
+========================= */
+.table-container {
+  max-height: 340px;        /* hauteur max du tableau */
+  overflow-y: auto;         /* scroll vertical si nécessaire */
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-top: 12px;
+}
+
+/* =========================
+   Tableau classique
+========================= */
+.fixed-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate; /* changer collapse en separate */
+  border-spacing: 0;         /* pour garder l'alignement */
+  table-layout: fixed;      /* colonnes fixes pour alignement thead/tbody */
+}
+
+.fixed-table td.small-header {
+  font-size: 0.8em;
+  line-height: 1.1;
+}
+
+/* =========================
+   Header sticky
+========================= */
+.fixed-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f3f3f3;
+  z-index: 2;
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   Cellules
+========================= */
+.fixed-table td,
+.fixed-table th {
+  min-width: 80px;           /* largeur minimale si besoin */
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease;
+}
+
+.fixed-table tbody {
+  min-width: 80px;           /* largeur minimale si besoin */
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease;
+}
+
+/* Curseur */
+.fixed-table:not(#tableBatch) td:not(:first-child) {
+  cursor: pointer;
+}
+
+.fixed-table:not(#tableBatch) td:first-child {
+  cursor: default;           /* colonne des titres */
+  background-color: #f3f3f3;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* =========================
+   Hover
+========================= */
+.fixed-table:not(#tableBatch) td.hover-row,
+.fixed-table:not(#tableBatch) td.hover-title,
+.fixed-table:not(#tableBatch) td.hover-col,
+.fixed-table:not(#tableBatch) th.hover-col {
+  background-color: rgb(224, 247, 252);
+}
+ 
+/* =========================
+   Sélection radio
+========================= */
+.fixed-table input[type=radio]:checked {
+  accent-color: #0078d7;
+}
+
+.fixed-table tr:has(input[type=radio]:checked) td {
+  background-color: rgb(242, 248, 253);
+}
+
+.fixed-table td.selected-col,
+.fixed-table th.selected-col {
+  background-color: rgb(242, 248, 253);
+}
+
+/* =========================
+   Boutons batch
+========================= */
+.boutons-batch {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.boutons-batch button {
+  height: 26px;
+  padding: 2px 10px;
+}
+
+/* Batch name input */
+.batch-name-input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* =========================
+   Boutons de bas de page
+========================= */
+/* Boutons bas de page */
+.generate-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.generate-container label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  justify-self: center;
+  gap: 10px
+}
+
+.generate-container label input {
+  margin-left: 8px;
+  max-width: 110px;
+}
+
+.generate-container button {
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  gap: 10px;
+  padding: 16px 16px;
+  font-size: 16px;
+  font-size: 1.1em;
+} 
+
+.generate-container .btn-arrow {
+  font-size: 36px;
+  line-height: 1.2;
+  padding-bottom: 6px;
+}
+.generate-container .btn-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
