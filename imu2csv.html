@@ -19,7 +19,8 @@
     </div>
     <div class="header-center">
       <a href="imu2csv.html" class="header-title">
-        <h1 class="header-title" data-i18n="imu2csv_title">Organisation des données</h1>
+        <h1 class="header-title" data-i18n="imu2csv_title">Structuration des données</h1>
+        <img class="img-soustitre" src="assets/soustitre_imu2csv.svg" onerror="this.style.display='none'">
       </a>
     </div>
     <div class="header-right">
@@ -210,16 +211,17 @@
 
     <!-- Bouton de génération des CSV -->
     <div class="generate-container">
-      <span></span>
-      <button id="generateCSVBtn" disabled data-i18n="imu2csv_generatebtn">Générer le(s) fichier(s) CSV</button>
       <button id="NewCuration">
-        <span class="btn-text" data-i18n="newimu2csv">Nouvelle(s) acquisition(s)</span>
         <span class="btn-arrow">↺</span> 
+        <span class="btn-text" data-i18n="newimu2csv">Nouvelle(s) acquisition(s)</span>
+      </button>
+      <button id="generateCSVBtn" disabled data-i18n="imu2csv_generatebtn">Générer le(s) fichier(s) CSV</button>
+      <button onclick="location.href='pretraitement.html'">
+        <span class="btn-text" data-i18n="pretraitement_button">Prétraitement des données </span>
+        <span class="btn-arrow">➪</span> 
       </button>
     </div>
-
     <div id="statusMsgSaveCSV"></div>
-
   </div> 
 
   <!-- Footer -->

@@ -42,7 +42,7 @@
 
   <!-- Début du contenu -->
   <div class="container">
-    <div data-i18n-html="intro_text1">
+    <div class="border-bot" data-i18n-html="intro_text1">
       <p>Bienvenue sur cette application d’analyse des actions locomotrices en Fauteuil Roulant Manuel (FRM). Cette application vous permettra de :</p>
       
       <ul>
@@ -51,24 +51,28 @@
         <li>Visualiser les résultats sous forme de chronogrammes épurés.</li>
         <li>Exporter les résultats au format CSV pour un traitement ultérieur.</li>
       </ul>
+    </div>
+    <img class="img-responsive" src="assets/pipeline.svg" onerror="this.style.display='none'">
+    <div class="border-top" data-i18n-html="intro_text2">
       <p>Par souci éthique de <strong>confidentialité</strong> et grâce à la solution technique employée (JavaScript), tous les calculs sont effectués uniquement sur <strong>votre ordinateur</strong>.</br> 
-        Ainsi, les données saisies dans cette application ne sont jamais transférées vers un serveur ni enregistrées</p>
+        Ainsi, les données saisies dans cette application ne sont jamais transférées vers un serveur ni enregistrées.</p>
       <p>Avant de commencer, il est important de :</p>
     </div> 
-    <div data-i18n-html="intro_text2" id="introContainer">
+    <div data-i18n-html="intro_text3" id="introContainer">
       <ul>
-        <li>Lire attentivement le <a href="{{i18n.help_manual_href}}" target="_blank" rel="noopener" class="clickable">manuel d'utilisation</a></li>
+        <li>Lire attentivement le <a href="assets/ManuelUtilisation_FR.pdf" target="_blank" rel="noopener" class="clickable">manuel d'utilisation.</a></li>
         <li>S'assurer que les données enregistrées soient <strong>complètent</strong>, les données incomplètent n'étant pas gérées par cette application.</li>
-        <li>Comprendre le fonctionnement du traitement et la signification des chronogrammes en lisant <a href="{{i18n.help_explication_href}}" target="_blank" rel="noopener" class="clickable">l'aide</a> ou les <span id="manualTrigger" class="clickable">publications associées à ces travaux</span>.</li>
+        <li>Comprendre le fonctionnement du traitement et la signification des chronogrammes en lisant <a href="assets/ExplicationCalculs_EN.pdf" target="_blank" rel="noopener" class="clickable">l'aide</a> ou les <span id="manualTrigger" class="clickable">publications associées à ces travaux</span>.</li>
       </ul>
 
-      <p>Une fois que vous aurez pris connaissance de toutes ces informations, utilisez les boutons ci-dessous pour naviguer dans l'application.</p>
+      <p>Une fois que vous aurez pris connaissance de toutes ces informations, utilisez les boutons ci-dessous pour naviguer dans l'application.
+      </br>Des <a href="assets/SampleData.zip" target="_blank" rel="noopener" class="clickable" download="true">données de démonstrations</a> sont mises à disposition pout tester les diférentes fonctionnalités.</p>
     </div>
     <!-- Boutons bas de page -->
     <div class="button-row">
-      <a href="assets/SampleData.zip" class="btn-read" data-i18n-href="sample_zip" download>
-        <img src="assets/sample.png" onerror="this.style.display='none'">
-        <span data-i18n-html="download_sample" class="i18n-text">Télécharger les </br> données de démonstration</span>
+      <a href="imu2csv.html" class="btn-read" data-i18n="imu2csv_button">
+        <img src="assets/structuring.png" onerror="this.style.display='none'">
+        <span class="i18n-text">Structuration des données</span>
       </a>
       <a href="pretraitement.html" class="btn-read" data-i18n="pretraitement_button">
         <img src="assets/pretraitement.png" onerror="this.style.display='none'">
@@ -227,5 +231,4 @@
 
   </body>
   </html>
-
 

@@ -20,6 +20,7 @@
     <div class="header-center">
       <a href="pretraitement.html" class="header-title">
         <h1 class="header-title" data-i18n="pretrait_title">Pré-traitement des données</h1>
+        <img class="img-soustitre" src="assets/soustitre_pretraitement.svg" onerror="this.style.display='none'">
       </a>
     </div>
     <div class="header-right">
@@ -262,22 +263,18 @@
     <!-- Boutons de bas de page -->
     <div class="buttons-row-container">
       <button id="newFRMBtn" disabled> 
-          <span class="btn-arrow">🢤</span> 
+          <span class="btn-arrow">↺</span> 
           <span class="btn-text" data-i18n="nouv_FRM">Nouveau FRM</span> 
       </button>
-    
       <button id="saveDataIMUBtn" class="highlight-btn" disabled autocomplete="off" data-i18n="preprocessing_btn">
           Traiter les données
       </button>
-    
-      <button id="gotoIdentification" onclick="location.href='locomotion.html'">
+      <button onclick="location.href='locomotion.html'">
         <span class="btn-text" data-i18n="identification_button">Identification des tâches </span>
         <span class="btn-arrow">➪</span> 
       </button>
     </div>
-
     <div id="statusMsgSaveIMU"></div>
-    
   </div>
 
   <!-- Footer -->
