@@ -44,6 +44,23 @@ h1 {
   color: var(--secondary-color);
 }
 
+/* images */
+.img-responsive {
+  display: block;
+  margin: 12px auto;
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+}
+
+.img-soustitre {
+  display: block;
+  margin: 6px auto 0px;
+  max-height: 70px;
+  max-width: 100%;
+  height: auto;
+}
+
 /* Boutons */
 button {
   background: #e0e0e0;     
@@ -699,18 +716,22 @@ summary .summary-buttons .highlight-btn[disabled] {
   margin-left: auto;
   margin-right: auto;
   max-width: 1250px;
+  flex-wrap: wrap;
 }
 .app-header .header-left,
 .app-header .header-right {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .app-header .header-center {
   flex: 1 1 auto;
   text-align: center;
   margin-top: 5px;
   margin-bottom: 5px;
+  min-width: 50px;
 }
 .header-title{
   margin: 0;
@@ -718,10 +739,10 @@ summary .summary-buttons .highlight-btn[disabled] {
 }
 .header-subtitle{
   margin: 0;
-  font-size: 1.6em;
+  font-size: clamp(1rem, 2vw, 1.6em);
 }
 .header-logo {
-  height: 60px;
+  height: 75px;
   width: auto;
   display: flex;
 }

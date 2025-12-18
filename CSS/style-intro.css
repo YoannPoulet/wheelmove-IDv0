@@ -50,3 +50,11 @@ ul {
   .button-row { gap: 8px; }
   .btn-read { min-width: 160px; }
 }
+
+.border-top {
+  border-top: 1px solid #e6e6e6;
+}
+
+.border-bot {
+  border-bottom: 1px solid #e6e6e6;
+}
