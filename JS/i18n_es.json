@@ -40,7 +40,7 @@
   "chk_vit_ang": "Velocidad angular",
   "index_title": "Análisis de tareas locomotoras",
   "intro_title": "WheelMove-ID",
-  "intro_title2": "Herramientas para la identificación de acciones locomotoras en SRM",
+  "intro_title2": "Herramientas para la identificación</br> de acciones locomotoras en SRM",
   "pretrait_title": "Preprocesamiento de datos",
   "help_manual": "Manual de usuario",
   "help_manual_href": "assets/ManuelUtilisation_ES.pdf",
@@ -117,3 +117,4 @@
   "imu2csv_generatebtn": "Generar archivo(s) CSV",
   "newimu2csv": "Nueva(s) adquisición(es)"
 }
+
