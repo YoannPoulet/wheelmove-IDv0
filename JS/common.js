@@ -720,8 +720,8 @@ function pchipInterpolate(x, y, xi) {
       a.className = 'help-menu-item';
       a.setAttribute('role','menuitem');
       a.textContent = it.key;
+      a.setAttribute('data-i18n', it.key);
       if (it.hrefKey) {
-        a.setAttribute('data-i18n', it.key);
         a.setAttribute('data-i18n-href', it.hrefKey);
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
