@@ -491,7 +491,9 @@ function subtractMatrixRows(mat, vec) {
 }
 
 // Ajout vecteurs
-function addVectors(a,b){return a.map((v,i)=>v+b[i])}
+function addVectors(a,b){
+  return a.map((v,i)=>v+b[i])
+}
 
 // Fonction trapz (intégrale numérique par la règle des trapèzes)
 function trapz(y) {
@@ -709,18 +711,24 @@ function pchipInterpolate(x, y, xi) {
     // create menu items with i18n attributes so runtime i18n can set text and href
     const items = [
       { key: 'help_manual', hrefKey: 'help_manual_href' },
-      { key: 'help_explication', hrefKey: 'help_explication_href' }
+      { key: 'help_explication', hrefKey: 'help_explication_href' },
+      { key: 'help_sample_data', href: 'assets/SampleData.zip', download: true }
     ];
 
     for (const it of items) {
       const a = document.createElement('a');
       a.className = 'help-menu-item';
-      a.setAttribute('data-i18n', it.key);
-      a.setAttribute('data-i18n-href', it.hrefKey);
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
       a.setAttribute('role','menuitem');
       a.textContent = it.key;
+      if (it.hrefKey) {
+        a.setAttribute('data-i18n', it.key);
+        a.setAttribute('data-i18n-href', it.hrefKey);
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      } else if (it.href) {
+        a.href = it.href;
+        a.setAttribute('download', '');
+      }
       menu.appendChild(a);
     }
 
@@ -924,17 +932,10 @@ function refreshSelect() {
   });
 }
 
-const introContainer = document.getElementById('introContainer');
-if (introContainer) {
-  introContainer.addEventListener('click', (e) => {
-    if (e.target.id === 'manualTrigger') {
-      // Ouvre la modale des publications
-      const btn = document.getElementById('modalPublis');
-      if (btn) btn.click();
-    }
-  });
-}
-
-
-
-
+// Ouvrir la boite modale des publication après clic sur span dans le text de l'intro
+document.getElementById('introContainer').addEventListener('click', (e) => {
+  if (e.target.id === 'manualTrigger') {
+    const btn = document.getElementById('modalPublis');
+    if (btn) btn.click();
+  }
+});
