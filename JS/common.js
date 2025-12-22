@@ -41,25 +41,30 @@ async function handleFiles(files, category = null) {
     
     // Charger le fichier
     const text = await file.text();
-    if (category == "raw") {
-      const acq = new rawDataFiles(fileNameWithoutExt);
-      acq.loadRAW(file);
-      acq.category = category;
-      // Ajouter l'acquisition
-      appState.acquisitions.push(acq);
-      }
-    else {
-      const acq = new Acquisition(fileNameWithoutExt);
-      acq.loadDataFromCSV(text);
-      acq.category = category;
-      // Ajouter l'acquisition
-      appState.acquisitions.push(acq);
-    }    
-    
-    // Ajouter une ligne au tableau
-    const key = 'row_loaded';
-    const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
-    addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
+    try{ 
+      if (category == "raw") {
+        const acq = new rawDataFiles(fileNameWithoutExt);
+        acq.loadRAW(file);
+        acq.category = category;
+        // Ajouter l'acquisition
+        appState.acquisitions.push(acq);
+        }
+      else {
+        const acq = new Acquisition(fileNameWithoutExt);
+        acq.loadDataFromCSV(text);
+        acq.category = category;
+        // Ajouter l'acquisition
+        appState.acquisitions.push(acq);
+      }    
+      
+      // Ajouter une ligne au tableau
+      const key = 'row_loaded';
+      const msg = (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t(key) : "Chargé";
+      addFileRow(visibleName, msg, false, idForRow, fileNameWithoutExt, key);
+
+    } catch (err) {
+      addFileRow(visibleName, err && err.message ? err.message : String(err), true, idForRow, fileNameWithoutExt);
+    }
   }
 
   // Mettre à jour l'UI (table, bouton run)
