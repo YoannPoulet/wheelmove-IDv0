@@ -385,7 +385,7 @@ function runPipeline(acq) {
   );
 
   // --- 7) Réduire la variabilité ---
-  const improvedSignalLessVariability = reduceVariabilityActionsLocomotrices(improvedSignal, state.segmentationSize);
+  const improvedSignalLessVariability = reduceVariabilityActionsLocomotrices(improvedSignal);
 
   // --- 8) Convertir en signal unique pour chronogramme ---
   acq.signalUnique = Array(acq.nbFrames).fill(0);
@@ -847,6 +847,7 @@ function saveDataCSV(acq) {
   // Création du CSV : en-tête
   const detectedLang = (window.i18n && window.i18n.currentLang) ? window.i18n.currentLang : (localStorage.getItem('siteLang') || ((navigator.language || navigator.userLanguage || 'fr').startsWith('en') ? 'en' : 'fr'));
   const header = [
+    (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_time') : (detectedLang === 'en' ? 'Time (s)' : 'Temps (s)'),
     (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_lin') : (detectedLang === 'en' ? 'Linear velocity (m/s)' : 'Vitesse lineaire (m/s)'),
     (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_vit_ang') : (detectedLang === 'en' ? 'Angular velocity (deg/s)' : 'Vitesse angulaire (deg/s)'),
     (window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('csv_header_actions') : (detectedLang === 'en' ? 'Tasks' : 'Actions locomotrices')
@@ -855,6 +856,7 @@ function saveDataCSV(acq) {
 
   for (let i = 0; i < acq.nbFrames; i++) {
     const line = [
+      (i / fs).toFixed(3), // temps arrondi à la milliseconde
       acq.vitLin[i].toFixed(3),  // vitesse linéaire
       acq.vitAngDegSec[i].toFixed(3),  // vitesse angulaire
       acq.signalUnique[i]        // signal unique
