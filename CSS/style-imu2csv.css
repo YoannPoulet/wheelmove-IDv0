@@ -1,3 +1,21 @@
+.unit-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.radio-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* petit espace radio ↔ label */
+}
+
+.unit-selector label {
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+
 .acq-selector {
   display: flex;
   justify-content: center;
@@ -5,7 +23,7 @@
   gap: 8px;
 }
 
-.acq-selector:not(:first-of-type) {
+.acq-selector {
   padding-top: 12px;
   margin-top: 24px;
   border-top: 1px solid #e6e6e6;
@@ -174,7 +192,6 @@
   justify-self: center;
   gap: 10px;
   padding: 16px 16px;
-  font-size: 16px;
   font-size: 1.1em;
 } 
 
