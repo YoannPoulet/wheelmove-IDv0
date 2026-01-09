@@ -103,6 +103,7 @@
   "imu2csv_loadtitle": "<strong>Raw IMU files</strong>",
   "imu2csv_loadmsg": "Load raw IMU files",
   "imu2csv_imuChassis": "<strong>First acquisition</strong>",
+  "stronggyrunits": "<strong>Angular velocity units:</strong>",
   "strongchassis": "<strong>Frame:</strong>",
   "strongRD": "<strong>Right wheel:</strong>",
   "strongRG": "<strong>Left wheel:</strong>",

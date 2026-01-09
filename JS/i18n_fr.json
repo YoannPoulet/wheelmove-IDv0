@@ -103,6 +103,7 @@
   "imu2csv_loadtitle": "<strong>Fichiers bruts IMU</strong>",
   "imu2csv_loadmsg": "Charger les fichiers bruts IMU",
   "imu2csv_imuChassis": "<strong>Première acquisition</strong>",
+  "stronggyrunits": "<strong>Unités des vitesses angulaires :</strong>",
   "strongchassis": "<strong>Châssis :</strong>",
   "strongRD": "<strong>Roue droite :</strong>",
   "strongRG": "<strong>Roue gauche :</strong>",

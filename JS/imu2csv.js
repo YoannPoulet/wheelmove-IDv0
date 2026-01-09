@@ -3,7 +3,8 @@ const state = {
   acquisitions: [], 
   selectedChassis: null,
   selectedRD: null,
-  selectedRG: null        
+  selectedRG: null,
+  rawGyrUnits: null  // 'degs' or 'rads'      
 };
 
 // Classe rawDataFiles pour stocker les données IMU
@@ -165,6 +166,15 @@ document.addEventListener("DOMContentLoaded", () => {
   refreshBatchSelects();
   updateFirstBatchRowDisplay()
 });
+
+// Gestion des unités des vitesses angulaires
+document.querySelectorAll('input[name="rawgyrunit"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    state.rawGyrUnits = radio.value; // 'degs' ou 'rads'
+    checkExportReady();              // réévaluer l’état du bouton CSV
+  });
+});
+
 
 // Gestion du bouton de chargement des acquisitions IMU
 document.getElementById("loadimu2csv").addEventListener("click", () => {
@@ -521,12 +531,16 @@ function checkExportReady() {
   const batchTable = document.getElementById("tableBatch");
   if (batchTable) {
     const selects = batchTable.querySelectorAll("select");
-
     selects.forEach(select => {
       if (!select.value) {
         allReady = false;
       }
     });
+  }
+
+  // Vérification des unités des vitesses angulaires
+  if (!state.rawGyrUnits) {
+  allReady = false;
   }
 
   // Activer/désactiver le bouton export
@@ -618,6 +632,17 @@ function buildCSVForBatchLine({
   rdMapping,
   rgMapping
 }) {
+
+  // fonction locale de conversion des vitesses angulaires
+  function convertIfGyr(k, value) {
+    if (value == null || value === "") return value;
+    // Conversion uniquement pour les gyroscopes
+    if (k.startsWith("Gyr") && state.rawGyrUnits === "degs") {
+      return value *  Math.PI / 180;  // deg/s → rad/s
+    }
+    return value;
+  }
+
   const headers = [
     'Chassis_Acc_X','Chassis_Acc_Y','Chassis_Acc_Z',
     'Chassis_Gyr_X','Chassis_Gyr_Y','Chassis_Gyr_Z',
@@ -634,13 +659,13 @@ function buildCSVForBatchLine({
     const row = [];
 
     ['AccX','AccY','AccZ','GyrX','GyrY','GyrZ'].forEach(k =>
-      row.push(chassisMapping[k] ? acqChassis.Data[chassisMapping[k]]?.[i] ?? "" : "")
+      row.push(chassisMapping[k] ? convertIfGyr(k, acqChassis.Data[chassisMapping[k]]?.[i]) ?? "" : "")
     );
     ['AccX','AccY','AccZ','GyrX','GyrY','GyrZ'].forEach(k =>
-      row.push(rgMapping[k] ? acqRG.Data[rgMapping[k]]?.[i] ?? "" : "")
+      row.push(rgMapping[k] ? convertIfGyr(k, acqRG.Data[rgMapping[k]]?.[i]) ?? "" : "")
     );
     ['AccX','AccY','AccZ','GyrX','GyrY','GyrZ'].forEach(k =>
-      row.push(rdMapping[k] ? acqRD.Data[rdMapping[k]]?.[i] ?? "" : "")
+      row.push(rdMapping[k] ? convertIfGyr(k, acqRD.Data[rdMapping[k]]?.[i]) ?? "" : "")
     );
 
     lines.push(row);

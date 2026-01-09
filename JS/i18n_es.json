@@ -103,6 +103,7 @@
   "imu2csv_loadtitle": "<strong>Archivos IMU sin procesar</strong>",
   "imu2csv_loadmsg": "Cargar archivos IMU sin procesar",
   "imu2csv_imuChassis": "<strong>Primera adquisición</strong>",
+  "stronggyrunits": "<strong>Unidades de velocidad angular:</strong>",
   "strongchassis": "<strong>Chasis:</strong>",
   "strongRD": "<strong>Rueda derecha:</strong>",
   "strongRG": "<strong>Rueda izquierda:</strong>",
