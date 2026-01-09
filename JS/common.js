@@ -938,9 +938,11 @@ function refreshSelect() {
 }
 
 // Ouvrir la boite modale des publication après clic sur span dans le text de l'intro
-document.getElementById('introContainer').addEventListener('click', (e) => {
-  if (e.target.id === 'manualTrigger') {
-    const btn = document.getElementById('modalPublis');
-    if (btn) btn.click();
-  }
-});
+try{
+  document.getElementById('introContainer').addEventListener('click', (e) => {
+    if (e.target.id === 'manualTrigger') {
+      const btn = document.getElementById('modalPublis');
+      if (btn) btn.click();
+    }
+  });
+}catch(e){/*ignore*/}
