@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> WheelMove-ID : IMU raw data to CSV</title>
+  <title> WheelMove-ID : Structuring</title>
   <link rel="stylesheet" href="CSS/style.css">
   <link rel="stylesheet" href="CSS/style-imu2csv.css">
   <link rel="shortcut icon" type="image/x-icon" href="WheelMoveID.ico?">
@@ -91,6 +91,19 @@
         <summary class="custom-summary">
           <span class="summary-text" data-i18n-html="imu2csv_imuChassis"><strong>Première acquisition</strong></span> 
         </summary>
+
+        <!-- Selection des unités -->
+        <div class="unit-selector">
+          <label data-i18n-html="stronggyrunits"><strong>Unités des vitesses angulaires :</strong></label>
+          <span class="radio-group">
+            <input type="radio" name="rawgyrunit" id="rawgyrunitdeg" value="degs">
+            <label for="rawgyrunitdeg">deg/s</label>
+          </span>
+          <span class="radio-group">
+            <input type="radio" name="rawgyrunit" id="rawgyrunitrad" value="rads">
+            <label for="rawgyrunitrad">rad/s</label>
+          </span>
+        </div>
 
         <!-- IMU Chassis -->
         <div class="acq-selector">
