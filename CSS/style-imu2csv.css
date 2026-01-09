@@ -5,15 +5,16 @@
   gap: 16px;
 }
 
-.radio-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px; /* petit espace radio ↔ label */
-}
-
 .unit-selector label {
+  display: inline-block;  /* override global block */
   font-size: 1.25em;
   margin-bottom: 0;
+}
+
+.unit-selector .radio-group {
+  display: inline-flex;       /* radio + label ensemble */
+  align-items: center;
+  gap: 4px;                   /* petit espace radio/label */
 }
 
 .acq-selector {
