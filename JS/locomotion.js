@@ -282,7 +282,7 @@ document.getElementById('saveDataBtn').addEventListener('click', () => {
 
     state.acquisitions.forEach(acq => {
       console.log(`%%% Sauvegarde des résultats %%%`);
-      saveDataCSV(acq);
+      saveDataCSV(acq, state.freqAcq);
     });
 
     //Message enregistrement réussi
@@ -836,7 +836,7 @@ function plotChronogramme(acq) {
 }
 
 // ---------------- enregistrer un CSV résultat ----------------------
-function saveDataCSV(acq) {
+function saveDataCSV(acq, f) {
   if (!acq.vitLin || !acq.vitAngDegSec || !acq.signalUnique) {
     //Message enregistrement réussi
     showStatus((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('showStatus_error') : "❌ Erreur à l'enregistrement des résutlats", "error","statusMsgSave");
@@ -856,7 +856,7 @@ function saveDataCSV(acq) {
 
   for (let i = 0; i < acq.nbFrames; i++) {
     const line = [
-      (i / fs).toFixed(3), // temps arrondi à la milliseconde
+      (i/f).toFixed(3), // temps arrondi à la milliseconde
       acq.vitLin[i].toFixed(3),  // vitesse linéaire
       acq.vitAngDegSec[i].toFixed(3),  // vitesse angulaire
       acq.signalUnique[i]        // signal unique
