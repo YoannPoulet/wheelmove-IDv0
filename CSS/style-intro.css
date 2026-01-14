@@ -13,6 +13,43 @@ ul {
   padding-left: 20px;
 }
 
+/* Hitboxes sur l'image */
+/* Le div qu'on met par dessus l'image pour mettre les hitbox, il faut donc qu'il ait les mêmes dimensions que l'image */
+.nav-hitbox {
+  margin: 12px auto;
+  position: relative;
+  height: 100%;
+  max-width: 600px; /* taille des l'image utilisée en page d'intro */
+}
+
+.hitbox-index {
+  position: absolute;
+  top: 29%;
+  height: 30%;
+  border-radius: 8px;
+}
+
+.hitbox-index:hover {
+  background: rgba(0, 86, 179, 0.15);
+  cursor: pointer;
+}
+
+.hb-index-1 {
+  left: 14%;
+  width: 14%;
+}
+
+.hb-index-2 {
+  left: 41.8%;
+  width: 14%;
+}
+
+.hb-index-3 {
+  left: 69.7%;
+  width: 14%;
+}
+
+
 /* Bouton continuer */
 .btn-read {
   display: inline-flex;

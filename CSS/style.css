@@ -55,10 +55,45 @@ h1 {
 
 .img-soustitre {
   display: block;
-  margin: 6px auto 0px;
   max-height: 70px;
   max-width: 100%;
   height: auto;
+}
+
+/* Hitboxes */
+/* Le div qu'on met par dessus l'image pour mettre les hitbox, il faut donc qu'il ait les mêmes dimensions que l'image */
+.nav-hitbox-header {
+  margin: 6px auto 0px;
+  position: relative;
+  height: 100%;
+  max-width: 482px; /* taille des images pour avoir 70px de haut, ce qui marche bien pour les titres */
+}
+
+.hitbox {
+  position: absolute;
+  top: 2%;
+  height: 57%;
+  border-radius: 6px;
+}
+
+.hb-1 {
+  left: 14.5%;
+  width: 14%;
+}
+
+.hb-2 {
+  left: 42%;
+  width: 14%;
+}
+
+.hb-3 {
+  left: 70%;
+  width: 14%;
+}
+
+.hitbox:hover {
+  background: rgba(0, 86, 179, 0.15);
+  cursor: pointer;
 }
 
 /* Boutons */
