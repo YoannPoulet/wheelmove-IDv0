@@ -950,11 +950,8 @@ function traitementLigneDroite() {
       [0, 0, vecteur[2]]
     ];
 
-    console.log(appState.matricesRotations.chassis);
     // Enregistrement des nouvelles matrices de rotation du châssis avec les bonnes orientations
     appState.matricesRotations.chassis = numeric.dot(S, appState.matricesRotations.chassis);
-    console.log(appState.matricesRotations.chassis);
-
   }
 }
 
