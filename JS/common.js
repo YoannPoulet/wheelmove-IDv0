@@ -517,6 +517,23 @@ function cosd(deg) {
   return Math.cos(deg * Math.PI / 180);
 }
 
+function cumsum(array) {
+  let sum = 0;
+  return array.map(n => sum += n);
+}
+
+function argMaxAbs(array) {
+  let maxVal = -Infinity;
+  let maxIndex = -1;
+  array.forEach((val, i) => {
+    if (Math.abs(val) > maxVal) {
+      maxVal = Math.abs(val);
+      maxIndex = i;
+    }
+  });
+  return maxIndex;
+}
+
 // Conception filtre Butterworth passe-bas (bilinéaire, comme MATLAB)
 function butterworth2Lowpass(fc, fs) {
 

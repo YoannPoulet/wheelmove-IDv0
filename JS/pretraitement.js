@@ -28,6 +28,10 @@ const state = {
   inversionVitesseAngulaire: {
     roueDroite: false,
     roueGauche: false
+  },
+  inversionAxeChassis: {
+    vertical: false,
+    anteropost: false,
   }
 };
 
@@ -359,7 +363,7 @@ function updateAllValidateButtons() {
   }
   const distContactPoints = dist.value*0.01; // cm -> m 
   const carrossageRad = state.param.carrossage * Math.PI / 180; // degrees to radians
-  state.param.distCentresRoues = distContactPoints - (state.param.rayonRoueGauche * Math.cos(carrossageRad) + state.param.rayonRoueDroite * Math.cos(carrossageRad));
+  state.param.distCentresRoues = distContactPoints - (state.param.rayonRoueGauche * Math.sin(carrossageRad) + state.param.rayonRoueDroite * Math.sin(carrossageRad));
 
   // états basés sur inputs
   const canValidate1 = !!(freq && freq.value) &&
@@ -812,6 +816,11 @@ function traitementStatique() {
     const absValues = valeursMoy.map(Math.abs);
     const indiceMax = absValues.indexOf(Math.max(...absValues));
 
+    if (valeursMoy[indiceMax] < 0) {
+      appState.inversionAxeChassis.vertical = true;
+      console.log("Inversion de l'accélération linéaire verticale du chassis sur la base de la statique");
+    }
+
     appState.axePrincipal.chassis = indiceMax;
     appState.matricesRotations.chassis = Rpr_mvt_un_axe([mx, my, mz], indiceMax);
   }
@@ -826,7 +835,8 @@ function traitementLigneDroite() {
     if (!acq || acq.category !== 'LigneDroite') continue;
     const imuRD = acq.IMUroueDroite;
     const imuRG = acq.IMUroueGauche;
-    if (!imuRD && !imuRG) continue;
+    const imuFrame = acq.IMUchassis;
+    if (!imuRD && !imuRG && !imuFrame) continue;
 
     const mgx = meanIgnoringNaN(imuRD.gyrX);
     const mgy = meanIgnoringNaN(imuRD.gyrY);
@@ -865,31 +875,13 @@ function traitementLigneDroite() {
     const maxVal = Math.max(...gyrPrincipal.map(Math.abs));
     const seuil = 0.8 * maxVal;
     
-    const accXseuil = [];
-    const accYseuil = [];
-    const accZseuil = [];
     const matricesRotationRD = [];
     const matricesRotationRG = [];
     for (let iFrame = 0; iFrame < acq.nbFrames; iFrame++) {
        if (Math.abs(gyrPrincipal[iFrame]) <= seuil) continue;
       matricesRotationRD.push(Rpr_mvt_un_axe([imuRD.gyrX[iFrame], imuRD.gyrY[iFrame], imuRD.gyrZ[iFrame]], axePrincipal));
       matricesRotationRG.push(Rpr_mvt_un_axe([imuRG.gyrX[iFrame], imuRG.gyrY[iFrame], imuRG.gyrZ[iFrame]], axePrincipal));
-
-      accXseuil.push(acq.IMUchassis.accX[iFrame]);
-      accYseuil.push(acq.IMUchassis.accY[iFrame]);
-      accZseuil.push(acq.IMUchassis.accZ[iFrame]);
     }
-
-    //Identification de l'axe secondaire pour la centrale du châssis (axe dans le sens du déplacement)
-    const axePrincipalchassis = appState?.axePrincipal?.chassis || 2;
-    const meanAccX = meanIgnoringNaN(accXseuil.map(Math.abs), 0);
-    const meanAccY = meanIgnoringNaN(accYseuil.map(Math.abs), 0);
-    const meanAccZ = meanIgnoringNaN(accZseuil.map(Math.abs), 0);
-
-    const valeursMoyAcc = [meanAccX, meanAccY, meanAccZ];
-    const valeurMoyAcchorsaxePrincipal = valeursMoyAcc.filter((_,i) => i !== axePrincipalchassis);
-    const axeSecondaire = valeurMoyAcchorsaxePrincipal.indexOf(Math.max(...valeurMoyAcchorsaxePrincipal));
-    appState.axeSecondaire.chassis = axeSecondaire;
 
     // Calcul de la matrice de rotation moyenne
     const matRDmoy = meanRotationMatrix(matricesRotationRD);
@@ -898,6 +890,71 @@ function traitementLigneDroite() {
     // On s'assure que la matrice soit bien orthogonale par recalage rigide (SVD)
     appState.matricesRotations.roueDroite = fct_recalage(matRDmoy);
     appState.matricesRotations.roueGauche = fct_recalage(matRGmoy);
+
+
+
+    //Identification de l'axe secondaire pour la centrale du châssis (axe dans le sens du déplacement)
+    // par double "intégration" de l'accélération linéaire sur les deux axes restants (après réalignement de l'IMU), 
+    // puis comparaison des amplitudes pour trouver l'axe le plus impacté par les mouvements linéaires
+    const axePrincipalchassis = appState?.axePrincipal?.chassis || 2;
+    const accChassis = [imuFrame.accX, imuFrame.accY, imuFrame.accZ];
+    // Alignement des données avec l'axe principal du châssis
+    const AccChassisAligned = numeric.dot(appState.matricesRotations.chassis, accChassis);
+
+    // Récupération des axes horizontaux
+    let indicesRestant = [0, 1, 2];
+    indicesRestant = indicesRestant.filter(i => i !== axePrincipalchassis);
+
+    let positionA = cumsum(cumsum(AccChassisAligned[indicesRestant[0]]));
+    let positionB = cumsum(cumsum(AccChassisAligned[indicesRestant[1]]));
+   
+    // Trouver l'indice du max en valeur absolue
+    let idA = argMaxAbs(positionA);
+    let idB = argMaxAbs(positionB);
+
+    // Récupération des valeurs
+    let bothPositions = [positionA[idA], positionB[idB]];
+
+    // Trouver l'axe dominant
+    let idmax = argMaxAbs(bothPositions);
+
+    let axeSecondaire = indicesRestant[idmax];
+
+    appState.axeSecondaire.chassis = axeSecondaire;
+    if (bothPositions[idmax] < 0) {
+      appState.inversionAxeChassis.anteropost = true;
+      console.log("Inversion de l'accélération linéaire du chassis sur la base de la ligne droite");
+    }
+
+    // Recalculer la matrice de rotation du châssis pour s'assurer que l'axe vertical soit vers le haut et l'axe antéropost vers l'avant
+    let sAP = appState.inversionAxeChassis.anteropost ? -1 : 1;
+    let sV = appState.inversionAxeChassis.vertical ? -1 : 1;
+    
+    // Axes
+    const allAxes = [0, 1, 2];
+    const axePrincipalChassis = appState.axePrincipal.chassis;
+    const axeRestant = allAxes.find(a => a !== axePrincipalChassis && a !== axeSecondaire);
+    // Signe du dernier axe (det = +1)
+    const sRestant = sAP * sV;
+
+      // Vecteur de flip
+    const vecteur = [1, 1, 1];
+    vecteur[axePrincipalChassis] = sV;
+    vecteur[axeSecondaire] = sAP;
+    vecteur[axeRestant] = sRestant;
+
+    // Matrice diagonale
+    const S = [
+      [vecteur[0], 0, 0],
+      [0, vecteur[1], 0],
+      [0, 0, vecteur[2]]
+    ];
+
+    console.log(appState.matricesRotations.chassis);
+    // Enregistrement des nouvelles matrices de rotation du châssis avec les bonnes orientations
+    appState.matricesRotations.chassis = numeric.dot(appState.matricesRotations.chassis, S);
+    console.log(appState.matricesRotations.chassis);
+
   }
 }
 
@@ -911,8 +968,8 @@ function traitementIMUChassis(acq) {
   const gyrVec = [imu.gyrX, imu.gyrY, imu.gyrZ];
   const accVec = [imu.accX, imu.accY, imu.accZ];
 
-  const vitAngRf = numeric.dot(appState.matricesRotations.chassis, gyrVec); 
-  const accLinRf = numeric.dot(appState.matricesRotations.chassis, accVec);
+  let vitAngRf = numeric.dot(appState.matricesRotations.chassis, gyrVec); 
+  let accLinRf = numeric.dot(appState.matricesRotations.chassis, accVec);
 
   acq.dataIMUChassis.vitAngRf = vitAngRf;
   acq.dataIMUChassis.accLinRf = accLinRf;
@@ -1134,7 +1191,7 @@ function pansiot2011(acq) {
   
   const distCentresRoues = (appState && appState.param && appState.param.distCentresRoues) ? appState.param.distCentresRoues : null;
 
-  if (!Fe || !carrossage || !rayonRoueGauche || !rayonRoueDroite || !distCentresRoues) {
+  if (!Fe || !rayonRoueGauche || !rayonRoueDroite || !distCentresRoues) {
     console.warn("Paramètres manquants dans state.param — traitement des roues annulé");
     return;
   }

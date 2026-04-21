@@ -200,7 +200,7 @@ if (dropZoneimu2csv) {
   dropZoneimu2csv.addEventListener('drop', async (e) => {
     e.preventDefault();
     dropZoneimu2csv.classList.remove('dragover');
-    await handleFiles(e.target.files, "raw");
+    await handleFiles(e.dataTransfer.files, "raw");
     refreshSelect();
     refreshBatchSelects()
   });
